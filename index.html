@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhysioVoice — AI Receptionist for Canadian Physiotherapy Clinics</title>
+    <meta name="description" content="PhysioVoice is the AI receptionist built for Canadian physiotherapy clinics. Answer every call 24/7, book appointments automatically, and recover $89K+ in lost revenue per year. One flat monthly fee. No per-call surprises.">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PhysioVoice — AI Receptionist for Canadian Physio Clinics">
+    <meta property="og:description" content="Answer every call 24/7. Book appointments automatically. Recover $89K+ per year in missed revenue. Built for Canadian physiotherapy clinics. One flat monthly fee.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PhysioVoice — AI Receptionist for Canadian Physio Clinics">
+    <meta name="twitter:description" content="Answer every call 24/7. Book appointments automatically. Recover $89K+ per year. One flat monthly fee.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0a0f1a;
+            --slate: #3d4663;
+            --muted: #6b7394;
+            --surface: #f4f5f9;
+            --accent: #1a6b4a;
+            --accent-light: #e8f5ee;
+            --glow: #22c97a;
+            --warm: #f7f3ee;
+            --danger: #dc3545;
+            --danger-light: #fff0f0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--ink);
+            background: #fefefe;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(254,254,254,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--ink);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-tag {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-cta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.2px;
+        }
+
+        .nav-cta:hover {
+            background: #155a3e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(26, 107, 74, 0.3);
+        }
+
+        .nav-cta-demo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.2px;
+            border: 1.5px solid var(--accent);
+        }
+
+        .nav-cta-demo:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(26, 107, 74, 0.3);
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 140px 40px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 32px;
+            width: fit-content;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--glow);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.8rem);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            color: var(--ink);
+            max-width: 900px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: var(--slate);
+            line-height: 1.6;
+            max-width: 580px;
+            margin-bottom: 36px;
+        }
+
+        .hero-sub strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .hero-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent);
+            padding: 18px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .cta-primary:hover {
+            background: #155a3e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(26, 107, 74, 0.35);
+        }
+
+        .cta-primary:active { transform: translateY(0); }
+
+        .cta-primary .arrow { transition: transform 0.25s ease; }
+        .cta-primary:hover .arrow { transform: translateX(3px); }
+
+        .cta-demo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--ink);
+            background: var(--glow);
+            padding: 18px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 201, 122, 0.4); }
+            50% { box-shadow: 0 0 20px 4px rgba(34, 201, 122, 0.25); }
+        }
+
+        .cta-demo:hover {
+            background: #1de080;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(34, 201, 122, 0.4);
+        }
+
+        .cta-demo:active { transform: translateY(0); }
+        .cta-demo .arrow { transition: transform 0.25s ease; }
+        .cta-demo:hover .arrow { transform: translateX(3px); }
+
+        .cta-subtext {
+            font-size: 0.85rem;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 32px;
+        }
+
+        .hero-stat-row {
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat { display: flex; flex-direction: column; }
+
+        .hero-stat .num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -1px;
+        }
+
+        .hero-stat .label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ---- TRUST BADGES ---- */
+        .trust-bar {
+            background: var(--surface);
+            padding: 40px 40px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .trust-bar-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--slate);
+            font-weight: 500;
+        }
+
+        .trust-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* ---- PROBLEM ---- */
+        .problem {
+            background: var(--ink);
+            color: #fff;
+            padding: 120px 40px;
+        }
+
+        .problem-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .problem-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--glow);
+            margin-bottom: 24px;
+        }
+
+        .problem h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            max-width: 800px;
+            margin-bottom: 60px;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .problem-card {
+            background: rgba(255,255,255,0.04);
+            padding: 40px 32px;
+            border-radius: 2px;
+        }
+
+        .problem-card .icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .problem-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .problem-card p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.6;
+        }
+
+        .problem-card .stat-highlight {
+            color: var(--glow);
+            font-weight: 600;
+        }
+
+        /* ---- COMPARISON ---- */
+        .comparison {
+            padding: 120px 40px;
+            background: #fff;
+        }
+
+        .comparison-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .comparison-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .comparison h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            max-width: 700px;
+            margin-bottom: 16px;
+        }
+
+        .comparison-subtitle {
+            font-size: 1.05rem;
+            color: var(--slate);
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 56px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .comparison-table thead th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 24px 20px;
+            text-align: left;
+            background: var(--surface);
+            color: var(--slate);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .comparison-table thead th:first-child {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .comparison-table thead th.highlight {
+            background: var(--accent);
+            color: #fff;
+            position: relative;
+        }
+
+        .comparison-table thead th.highlight::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glow);
+            color: var(--ink);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 12px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .comparison-table tbody td {
+            padding: 18px 20px;
+            font-size: 0.9rem;
+            color: var(--slate);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        .comparison-table tbody tr:last-child td { border-bottom: none; }
+
+        .comparison-table tbody td:first-child {
+            font-weight: 500;
+            color: var(--ink);
+            font-size: 0.85rem;
+        }
+
+        .comparison-table tbody td.highlight {
+            background: rgba(26, 107, 74, 0.03);
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .comparison-table .check { color: var(--accent); font-weight: 700; }
+        .comparison-table .cross { color: var(--danger); font-weight: 700; }
+        .comparison-table .partial { color: #d4a843; font-weight: 600; }
+
+        /* ---- HOW ---- */
+        .how {
+            padding: 120px 40px;
+            background: var(--warm);
+        }
+
+        .how-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .how-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .how h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            max-width: 700px;
+            margin-bottom: 72px;
+        }
+
+        .how-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .how-step {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 32px;
+            padding: 40px 0;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            align-items: start;
+        }
+
+        .step-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .step-content p {
+            font-size: 1rem;
+            color: var(--slate);
+            line-height: 1.6;
+            max-width: 560px;
+        }
+
+        /* ---- MID CTA ---- */
+        .mid-cta {
+            padding: 80px 40px;
+            background: var(--accent-light);
+            text-align: center;
+        }
+
+        .mid-cta-inner {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .mid-cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .mid-cta p {
+            font-size: 1rem;
+            color: var(--slate);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .mid-cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* ---- REVENUE ---- */
+        .revenue {
+            padding: 120px 40px;
+            background: #fff;
+        }
+
+        .revenue-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .revenue-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .revenue h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .revenue h2 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .revenue-text p {
+            font-size: 1rem;
+            color: var(--slate);
+            line-height: 1.6;
+        }
+
+        .revenue-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rev-item {
+            background: var(--surface);
+            padding: 24px 28px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rev-item .rev-label {
+            font-size: 0.95rem;
+            color: var(--slate);
+        }
+
+        .rev-item .rev-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--accent);
+        }
+
+        .rev-total {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .rev-total .rev-label {
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+        }
+
+        .rev-total .rev-amount {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+
+        /* ---- FAQ ---- */
+        .faq {
+            padding: 100px 40px;
+            background: var(--surface);
+        }
+
+        .faq-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .faq h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 600;
+            letter-spacing: -1px;
+            margin-bottom: 56px;
+            line-height: 1.2;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            padding: 28px 0;
+        }
+
+        .faq-item:first-of-type { border-top: 1px solid rgba(0,0,0,0.07); }
+
+        .faq-item h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--ink);
+            letter-spacing: -0.3px;
+        }
+
+        .faq-item p {
+            font-size: 0.95rem;
+            color: var(--slate);
+            line-height: 1.7;
+        }
+
+        /* ---- CLOSING ---- */
+        .closing {
+            padding: 140px 40px;
+            background: var(--ink);
+            text-align: center;
+        }
+
+        .closing h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            max-width: 700px;
+            margin: 0 auto 24px;
+        }
+
+        .closing p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 520px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        .closing-cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cta-closing {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink);
+            background: var(--glow);
+            padding: 20px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-closing:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(34, 201, 122, 0.3);
+        }
+
+        .cta-closing:active { transform: translateY(0); }
+        .cta-closing .arrow { transition: transform 0.25s ease; }
+        .cta-closing:hover .arrow { transform: translateX(3px); }
+
+        .cta-closing-demo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 18px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-closing-demo:hover {
+            border-color: var(--glow);
+            color: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .cta-closing-demo:active { transform: translateY(0); }
+
+        /* ---- FOOTER ---- */
+        footer {
+            padding: 32px 40px;
+            background: var(--ink);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-tag { display: none; }
+            .nav-cta { font-size: 0.8rem; padding: 8px 14px; }
+            .nav-cta-demo { font-size: 0.8rem; padding: 8px 14px; }
+
+            .hero { padding: 120px 20px 60px; }
+            .hero h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); letter-spacing: -1.5px; }
+            .hero-cta-row { flex-direction: column; align-items: stretch; gap: 12px; }
+            .cta-primary { width: 100%; justify-content: center; font-size: 1rem; padding: 16px 28px; }
+            .cta-demo { width: 100%; justify-content: center; font-size: 1rem; padding: 16px 28px; }
+            .hero-stat-row { gap: 32px; }
+            .hero-stat .num { font-size: 2rem; }
+
+            .trust-bar { padding: 28px 20px; }
+            .trust-bar-inner { gap: 20px; justify-content: flex-start; }
+            .trust-badge { font-size: 0.8rem; }
+            .trust-icon { width: 30px; height: 30px; font-size: 0.9rem; }
+
+            .problem { padding: 80px 20px; }
+            .problem-grid { grid-template-columns: 1fr; gap: 12px; }
+
+            .comparison { padding: 80px 20px; }
+            .comparison-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
+            .comparison-table { min-width: 600px; font-size: 0.85rem; }
+            .comparison-table thead th { padding: 16px 14px; font-size: 0.8rem; }
+            .comparison-table tbody td { padding: 14px; font-size: 0.8rem; }
+
+            .how { padding: 80px 20px; }
+            .how-step { grid-template-columns: 48px 1fr; gap: 16px; }
+            .step-num { font-size: 2rem; }
+
+            .mid-cta { padding: 60px 20px; }
+            .mid-cta-row { flex-direction: column; align-items: stretch; }
+            .mid-cta-row .cta-primary,
+            .mid-cta-row .cta-demo { width: 100%; justify-content: center; }
+
+            .revenue { padding: 80px 20px; }
+            .revenue-inner { grid-template-columns: 1fr; gap: 48px; }
+
+            .faq { padding: 60px 20px; }
+
+            .closing { padding: 80px 20px; }
+            .closing-cta-row { flex-direction: column; align-items: stretch; }
+            .cta-closing { font-size: 1rem; padding: 16px 28px; justify-content: center; }
+            .cta-closing-demo { font-size: 1rem; padding: 14px 28px; justify-content: center; }
+
+            footer { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Physio<span>Voice</span></div>
+        <div class="nav-right">
+            <div class="nav-tag">AI Front Desk</div>
+            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="nav-cta-demo">Try Live Demo</a>
+            <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="nav-cta">Book a Demo</a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Built for Canadian clinics
+        </div>
+        <h1>The AI receptionist built for <em>Canadian physio</em> clinics</h1>
+        <p class="hero-sub">No per-call surprises. <strong>One flat monthly fee.</strong> PhysioVoice answers your phone 24/7, books appointments, and reduces no-shows &mdash; purpose-built for physiotherapy.</p>
+        <div class="hero-cta-row">
+            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-demo">Test the App Live <span class="arrow">&#9656;</span></a>
+            <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-primary">Book a Free 20-Min Intro Call <span class="arrow">&rarr;</span></a>
+        </div>
+        <span class="cta-subtext">Talk to the AI yourself &middot; No commitment &middot; See it in action</span>
+        <div class="hero-stat-row">
+            <div class="hero-stat">
+                <span class="num">24/7</span>
+                <span class="label">Call coverage</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">$89K+</span>
+                <span class="label">Revenue recovered / year</span>
+            </div>
+            <div class="hero-stat">
+                <span class="num">15-31%</span>
+                <span class="label">No-show rate eliminated</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TRUST BAR ===== -->
+    <section class="trust-bar">
+        <div class="trust-bar-inner">
+            <div class="trust-badge">
+                <span class="trust-icon">&#128274;</span>
+                PIPEDA Compliant
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#127973;</span>
+                HIPAA-Ready
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#128337;</span>
+                24/7 Availability
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#128197;</span>
+                Cal.com Integration
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#127464;&#127462;</span>
+                Canada-First
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROBLEM ===== -->
+    <section class="problem">
+        <div class="problem-inner">
+            <div class="problem-label">The problem</div>
+            <h2>Your front desk is your biggest bottleneck. Every missed call is a missed patient.</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <span class="icon">&#128222;</span>
+                    <h3>Missed after-hours calls</h3>
+                    <p>Clinics lose <span class="stat-highlight">20-30% of potential bookings</span> to voicemail. Patients who call after hours rarely call back &mdash; they book with whoever answers.</p>
+                </div>
+                <div class="problem-card">
+                    <span class="icon">&#128683;</span>
+                    <h3>No-shows drain revenue</h3>
+                    <p>No-show rates of <span class="stat-highlight">15-31% cost clinics thousands monthly</span>. That's revenue evaporating every single week.</p>
+                </div>
+                <div class="problem-card">
+                    <span class="icon">&#9201;</span>
+                    <h3>Staff stretched thin</h3>
+                    <p>Your receptionist handles check-ins, billing, and phones simultaneously. Something always gets dropped &mdash; and it's usually the phone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMPETITOR COMPARISON ===== -->
+    <section class="comparison">
+        <div class="comparison-inner">
+            <div class="comparison-label">Why PhysioVoice</div>
+            <h2>Not another generic AI. Built specifically for physio.</h2>
+            <p class="comparison-subtitle">Generic voice AI doesn't understand physiotherapy scheduling, intake, or compliance. Traditional answering services cost more and do less. Here's how we compare.</p>
+            <div class="comparison-table-wrap">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="highlight">PhysioVoice</th>
+                        <th>Generic Voice AI</th>
+                        <th>Traditional Answering Service</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monthly cost</td>
+                        <td class="highlight"><strong>Flat rate</strong> &mdash; no per-call fees</td>
+                        <td>$0.10-$1.00+ per minute<br><span style="font-size:0.8rem;color:var(--muted);">Costs spike with volume</span></td>
+                        <td>$300-$1,200/mo<br><span style="font-size:0.8rem;color:var(--muted);">+ overage charges</span></td>
+                    </tr>
+                    <tr>
+                        <td>Availability</td>
+                        <td class="highlight"><span class="check">&#10003;</span> 24/7/365</td>
+                        <td><span class="check">&#10003;</span> 24/7</td>
+                        <td><span class="partial">~</span> Business hours + limited after-hours</td>
+                    </tr>
+                    <tr>
+                        <td>Physio specialization</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Purpose-built for physiotherapy</td>
+                        <td><span class="cross">&#10007;</span> Generic scripts, no clinical knowledge</td>
+                        <td><span class="cross">&#10007;</span> General scripts</td>
+                    </tr>
+                    <tr>
+                        <td>Live appointment booking</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Books directly into your calendar</td>
+                        <td><span class="partial">~</span> Requires custom integration</td>
+                        <td><span class="cross">&#10007;</span> Takes messages only</td>
+                    </tr>
+                    <tr>
+                        <td>No-show reduction</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Automated voice + SMS reminders</td>
+                        <td><span class="cross">&#10007;</span> Not included</td>
+                        <td><span class="cross">&#10007;</span> Not included</td>
+                    </tr>
+                    <tr>
+                        <td>PIPEDA compliance</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Built-in for Canadian clinics</td>
+                        <td><span class="cross">&#10007;</span> US-focused, not Canadian-compliant</td>
+                        <td><span class="partial">~</span> Varies by provider</td>
+                    </tr>
+                    <tr>
+                        <td>Call transcripts &amp; analytics</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Full dashboard + audit trail</td>
+                        <td><span class="partial">~</span> Basic logging</td>
+                        <td><span class="cross">&#10007;</span> Summary notes only</td>
+                    </tr>
+                    <tr>
+                        <td>Setup time</td>
+                        <td class="highlight">Under 48 hours</td>
+                        <td>Days to weeks of configuration</td>
+                        <td>1-2 weeks onboarding</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="how">
+        <div class="how-inner">
+            <div class="how-label">How it works</div>
+            <h2>An AI that speaks physio and never takes a sick day</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <span class="step-num">01</span>
+                    <div class="step-content">
+                        <h3>Answers every call</h3>
+                        <p>PhysioVoice picks up instantly with a natural, conversational voice. During hours, after hours, holidays. Patients talk to an AI that understands physiotherapy scheduling, services, and common questions.</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <span class="step-num">02</span>
+                    <div class="step-content">
+                        <h3>Books appointments live</h3>
+                        <p>Connected to your calendar in real-time via Cal.com. The AI checks availability, confirms the booking, and sends confirmation. No double-bookings. No phone tag.</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <span class="step-num">03</span>
+                    <div class="step-content">
+                        <h3>Reduces no-shows</h3>
+                        <p>Automated voice and SMS reminders before every appointment. Patients who need to reschedule do it through the AI instead of just not showing up.</p>
+                    </div>
+                </div>
+                <div class="how-step">
+                    <span class="step-num">04</span>
+                    <div class="step-content">
+                        <h3>Hands off when needed</h3>
+                        <p>Complex questions or urgent matters get seamlessly transferred to your staff. Every call is logged, transcribed, and audit-ready in your dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MID-PAGE CTA ===== -->
+    <section class="mid-cta">
+        <div class="mid-cta-inner">
+            <h2>Hear PhysioVoice answer a call yourself</h2>
+            <p>Try the live demo &mdash; ask it about booking, services, or availability. Then let's talk about your clinic.</p>
+            <div class="mid-cta-row">
+                <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-demo">Test the App Live <span class="arrow">&#9656;</span></a>
+                <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-primary">Book a Free Intro Call <span class="arrow">&rarr;</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVENUE ===== -->
+    <section class="revenue">
+        <div class="revenue-inner">
+            <div class="revenue-text">
+                <div class="revenue-label">The math</div>
+                <h2><em>$89,000+</em> recovered per year</h2>
+                <p>PhysioVoice doesn't just save time. It captures revenue your clinic is currently losing to missed calls, no-shows, and after-hours silence. The ROI pays for itself within months &mdash; not years.</p>
+            </div>
+            <div class="revenue-breakdown">
+                <div class="rev-item">
+                    <span class="rev-label">Front desk labor savings</span>
+                    <span class="rev-amount">$11,000+</span>
+                </div>
+                <div class="rev-item">
+                    <span class="rev-label">After-hours sessions captured</span>
+                    <span class="rev-amount">$28,000+</span>
+                </div>
+                <div class="rev-item">
+                    <span class="rev-label">No-shows recovered</span>
+                    <span class="rev-amount">$14,000+</span>
+                </div>
+                <div class="rev-item">
+                    <span class="rev-label">New patient lifetime value</span>
+                    <span class="rev-amount">$34,000+</span>
+                </div>
+                <div class="rev-item rev-total">
+                    <span class="rev-label">Total annual impact</span>
+                    <span class="rev-amount">$89,000+</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq">
+        <div class="faq-inner">
+            <div class="faq-label">Common questions</div>
+            <h2>Everything you need to know</h2>
+
+            <div class="faq-item">
+                <h3>How is PhysioVoice different from generic voice AI like Bland.ai or Vapi?</h3>
+                <p>Generic voice AI platforms require you to build your own scripts, integrations, and compliance. PhysioVoice is purpose-built for Canadian physiotherapy &mdash; it understands your scheduling, intake flows, and PIPEDA requirements out of the box. Plus, we charge a flat rate. No per-minute billing that spikes with volume.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What does "flat rate" mean? Are there really no per-call charges?</h3>
+                <p>One monthly fee. Unlimited calls. No per-minute billing, no overage charges, no surprise invoices. Your cost is the same whether you get 50 calls or 500.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is PhysioVoice compliant with Canadian privacy regulations?</h3>
+                <p>Yes. PhysioVoice is built PIPEDA-compliant for Canadian healthcare. We also align with HIPAA standards. All call data is encrypted, access-controlled, and audit-ready.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How quickly can I get set up?</h3>
+                <p>Most clinics are live within 48 hours. We handle the configuration, connect to your calendar (Cal.com), and customize the AI to your clinic's services and scheduling rules.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can it handle complex patient questions?</h3>
+                <p>For common questions &mdash; availability, services, location, booking &mdash; PhysioVoice handles it. For complex clinical questions or urgent matters, it seamlessly transfers to your staff. Every call is logged with a full transcript.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Where does the $89K figure come from?</h3>
+                <p>It's based on the average Canadian physio clinic: recovered after-hours bookings ($28K), reduced no-shows ($14K), new patient lifetime value from captured leads ($34K), and front desk labor savings ($11K). Your mileage may vary, but most clinics see ROI within the first 2-3 months.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CLOSING ===== -->
+    <section class="closing">
+        <h2>Stop losing patients to voicemail</h2>
+        <p>PIPEDA-compliant. HIPAA-aligned. Flat-rate pricing. Built exclusively for Canadian physiotherapy clinics that refuse to lose another patient to a missed call.</p>
+        <div class="closing-cta-row">
+            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-closing">Test the App Live <span class="arrow">&#9656;</span></a>
+            <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-closing-demo">Book Your Free Intro Call <span class="arrow">&rarr;</span></a>
+        </div>
+    </section>
+
+    <footer>
+        <p>PhysioVoice &mdash; AI voice automation for Canadian physiotherapy clinics</p>
+    </footer>
+</body>
+</html>
