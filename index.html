@@ -1830,8 +1830,18 @@
 
         async function loadVapi() {
             if (vapi) return vapi;
-            const mod = await import("https://cdn.jsdelivr.net/npm/@vapi-ai/web/+esm");
-            const Vapi = mod.default;
+            const mod = await import("https://esm.sh/@vapi-ai/web@latest");
+            let Vapi = mod.default;
+            if (Vapi && typeof Vapi !== "function" && typeof Vapi.default === "function") {
+                Vapi = Vapi.default;
+            }
+            if (typeof Vapi !== "function" && typeof mod.Vapi === "function") {
+                Vapi = mod.Vapi;
+            }
+            if (typeof Vapi !== "function") {
+                console.error("Vapi constructor not found. Module shape:", mod);
+                throw new TypeError("Vapi constructor not found in module");
+            }
             vapi = new Vapi(PUBLIC_KEY);
             vapi.on("call-start", () => setState("active"));
             vapi.on("call-end", () => setState("idle"));
