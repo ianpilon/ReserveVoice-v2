@@ -263,25 +263,25 @@
             <div class="calc-head">
                 <div class="calc-label">Revenue loss calculator</div>
                 <h2>How much are missed reservation calls costing your restaurant?</h2>
-                <p class="calc-anchor"><strong>Starting point:</strong> just 1 missed reservation per month. Drag the sliders below to match what you think your restaurant actually misses.</p>
+                <p class="calc-anchor"><strong>Defaults shown</strong> reflect a typical independent restaurant. Drag the sliders to match what your restaurant actually misses.</p>
             </div>
             <div class="calc-grid">
                 <div class="calc-controls">
                     <div class="calc-row">
                         <div class="calc-row-head">
                             <span class="calc-row-label">Missed reservation calls per month</span>
-                            <span class="calc-value-chip" id="calcMissedValue">1</span>
+                            <span class="calc-value-chip" id="calcMissedValue">3</span>
                         </div>
-                        <input type="range" class="calc-slider" id="calcMissed" min="1" max="300" step="1" value="1">
+                        <input type="range" class="calc-slider" id="calcMissed" min="1" max="300" step="1" value="3">
                         <div class="calc-range"><span>1</span><span>300</span></div>
                     </div>
 
                     <div class="calc-row">
                         <div class="calc-row-head">
                             <span class="calc-row-label">Callers who would book</span>
-                            <span class="calc-value-chip" id="calcConvertValue">100%</span>
+                            <span class="calc-value-chip" id="calcConvertValue">80%</span>
                         </div>
-                        <input type="range" class="calc-slider" id="calcConvert" min="20" max="100" step="5" value="100">
+                        <input type="range" class="calc-slider" id="calcConvert" min="20" max="100" step="5" value="80">
                         <div class="calc-range"><span>20%</span><span>100%</span></div>
                     </div>
 
@@ -303,12 +303,12 @@
                     <div class="result-card lost">
                         <div class="result-tag"><span class="pill"></span> Revenue lost</div>
                         <div class="result-sub" id="resultLostSub">Per month</div>
-                        <div class="result-amount" id="resultLostAmount">$140</div>
+                        <div class="result-amount" id="resultLostAmount">$336</div>
                         <div class="result-meta">
                             <div class="result-meta-icon">&#128222;</div>
                             <div class="result-meta-text">
-                                <span class="result-meta-num" id="resultLostCalls">1</span>
-                                <span class="result-meta-label" id="resultLostCallsLabel">missed call per month</span>
+                                <span class="result-meta-num" id="resultLostCalls">3</span>
+                                <span class="result-meta-label" id="resultLostCallsLabel">missed calls per month</span>
                             </div>
                         </div>
                     </div>
@@ -316,12 +316,12 @@
                     <div class="result-card recovered">
                         <div class="result-tag"><span class="pill"></span> With ReserveVoice</div>
                         <div class="result-sub" id="resultRecoveredSub">Revenue recovered per month</div>
-                        <div class="result-amount" id="resultRecoveredAmount">$98</div>
+                        <div class="result-amount" id="resultRecoveredAmount">$235</div>
                         <div class="result-meta">
                             <div class="result-meta-icon">&#128197;</div>
                             <div class="result-meta-text">
-                                <span class="result-meta-num" id="resultRecoveredBookings">1</span>
-                                <span class="result-meta-label" id="resultRecoveredBookingsLabel">extra reservation per month</span>
+                                <span class="result-meta-num" id="resultRecoveredBookings">2</span>
+                                <span class="result-meta-label" id="resultRecoveredBookingsLabel">extra reservations per month</span>
                             </div>
                         </div>
                     </div>
