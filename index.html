@@ -1413,6 +1413,172 @@
             line-height: 1.6;
         }
 
+        /* ---- PAYBACK (Investment / Return) ---- */
+        .payback {
+            padding: 100px 40px;
+            background: var(--surface);
+        }
+
+        .payback-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .payback-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .payback h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            max-width: 720px;
+            margin: 0 auto 16px;
+            text-align: center;
+        }
+
+        .payback-sub {
+            font-size: 1rem;
+            color: var(--slate);
+            line-height: 1.6;
+            max-width: 640px;
+            margin: 0 auto 48px;
+            text-align: center;
+        }
+
+        .payback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .payback-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payback-card.return {
+            background: var(--accent-light);
+            border-color: rgba(184, 85, 12, 0.15);
+        }
+
+        .payback-card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .payback-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--muted);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .payback-card.return .payback-icon {
+            background: rgba(184, 85, 12, 0.15);
+            color: var(--accent);
+        }
+
+        .payback-card-head h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: -0.3px;
+        }
+
+        .payback-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            gap: 16px;
+        }
+
+        .payback-card.return .payback-row {
+            border-bottom-color: rgba(184, 85, 12, 0.12);
+        }
+
+        .payback-row.total {
+            border-bottom: none;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            padding-top: 18px;
+            margin-top: 4px;
+        }
+
+        .payback-row-label {
+            font-size: 0.92rem;
+            color: var(--slate);
+            flex: 1;
+        }
+
+        .payback-row.total .payback-row-label {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        .payback-row-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--ink);
+            white-space: nowrap;
+        }
+
+        .payback-card.return .payback-row-value {
+            color: var(--accent);
+        }
+
+        .payback-row.total .payback-row-value {
+            font-size: 1.2rem;
+        }
+
+        .payback-roi {
+            margin-top: auto;
+            padding: 14px 18px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payback-roi .roi-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .payback-roi .roi-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            white-space: nowrap;
+        }
+
         /* ---- RESPONSIVE ---- */
         @media (max-width: 768px) {
             nav { padding: 16px 20px; }
@@ -1445,6 +1611,10 @@
             .timeline { padding: 70px 20px; }
             .timeline-grid { grid-template-columns: 1fr; gap: 14px; }
             .timeline-card { padding: 24px 24px; }
+
+            .payback { padding: 70px 20px; }
+            .payback-grid { grid-template-columns: 1fr; gap: 16px; }
+            .payback-card { padding: 24px; }
 
             .research { padding: 70px 20px; }
             .research-inner { grid-template-columns: 1fr; gap: 32px; }
@@ -1875,6 +2045,57 @@
         update();
     })();
     </script>
+
+    <!-- ===== PAYBACK (Investment / Return) ===== -->
+    <section class="payback">
+        <div class="payback-inner">
+            <div class="payback-label">Pays for itself</div>
+            <h2>One extra reservation pays for the whole thing.</h2>
+            <p class="payback-sub">If your average reservation is $140 (a party of four spending $35 each), capturing just one extra booking a month more than covers ReserveVoice.</p>
+            <div class="payback-grid">
+                <div class="payback-card investment">
+                    <div class="payback-card-head">
+                        <div class="payback-icon">&minus;</div>
+                        <h3>Your investment</h3>
+                    </div>
+                    <div class="payback-row">
+                        <span class="payback-row-label">Setup fee (one-time)</span>
+                        <span class="payback-row-value">$99</span>
+                    </div>
+                    <div class="payback-row">
+                        <span class="payback-row-label">Monthly subscription</span>
+                        <span class="payback-row-value">$249</span>
+                    </div>
+                    <div class="payback-row total">
+                        <span class="payback-row-label">Total cost (month 1)</span>
+                        <span class="payback-row-value">$348</span>
+                    </div>
+                </div>
+                <div class="payback-card return">
+                    <div class="payback-card-head">
+                        <div class="payback-icon">&#8599;</div>
+                        <h3>Your return</h3>
+                    </div>
+                    <div class="payback-row">
+                        <span class="payback-row-label">1 extra reservation captured</span>
+                        <span class="payback-row-value">+$140</span>
+                    </div>
+                    <div class="payback-row">
+                        <span class="payback-row-label">10 extra per month (modest)</span>
+                        <span class="payback-row-value">+$1,400</span>
+                    </div>
+                    <div class="payback-row">
+                        <span class="payback-row-label">30 extra per month (typical)</span>
+                        <span class="payback-row-value">+$4,200</span>
+                    </div>
+                    <div class="payback-roi">
+                        <span class="roi-label">Your ROI (month 1)</span>
+                        <span class="roi-value">4&ndash;12&times; return</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- ===== REVENUE ===== -->
     <section class="revenue">
