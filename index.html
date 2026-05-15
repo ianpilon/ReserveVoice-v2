@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhysioVoice — AI Receptionist for Canadian Physiotherapy Clinics</title>
-    <meta name="description" content="PhysioVoice is the AI receptionist built for Canadian physiotherapy clinics. Answer every call 24/7, book appointments automatically, and recover $89K+ in lost revenue per year. One flat monthly fee. No per-call surprises.">
+    <title>ReserveVoice. AI Reservation Receptionist for Restaurants</title>
+    <meta name="description" content="ReserveVoice answers your restaurant's phone 24/7 and takes reservations on the spot. After hours, during the dinner rush, every call. One flat monthly fee. No more lost bookings.">
 
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="PhysioVoice — AI Receptionist for Canadian Physio Clinics">
-    <meta property="og:description" content="Answer every call 24/7. Book appointments automatically. Recover $89K+ per year in missed revenue. Built for Canadian physiotherapy clinics. One flat monthly fee.">
+    <meta property="og:title" content="ReserveVoice. AI Reservation Receptionist for Restaurants">
+    <meta property="og:description" content="Pick up every reservation call, even after hours and during the dinner rush. ReserveVoice takes the booking, syncs to your book, and sends a confirmation. One flat monthly fee.">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="PhysioVoice — AI Receptionist for Canadian Physio Clinics">
-    <meta name="twitter:description" content="Answer every call 24/7. Book appointments automatically. Recover $89K+ per year. One flat monthly fee.">
+    <meta name="twitter:title" content="ReserveVoice. AI Reservation Receptionist for Restaurants">
+    <meta name="twitter:description" content="Pick up every reservation call. Take the booking. Sync it to your book. 24/7, in any language. One flat monthly fee.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,11 +26,11 @@
             --ink: #0a0f1a;
             --slate: #3d4663;
             --muted: #6b7394;
-            --surface: #f4f5f9;
-            --accent: #1a6b4a;
-            --accent-light: #e8f5ee;
-            --glow: #22c97a;
-            --warm: #f7f3ee;
+            --surface: #f6f3ee;
+            --accent: #b8550c;
+            --accent-light: #fdf0e3;
+            --glow: #f59e0b;
+            --warm: #fbf6ef;
             --danger: #dc3545;
             --danger-light: #fff0f0;
         }
@@ -96,9 +96,9 @@
         }
 
         .nav-cta:hover {
-            background: #155a3e;
+            background: #98460a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(26, 107, 74, 0.3);
+            box-shadow: 0 4px 16px rgba(184, 85, 12, 0.3);
         }
 
         .nav-cta-demo {
@@ -119,7 +119,7 @@
             background: var(--accent);
             color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(26, 107, 74, 0.3);
+            box-shadow: 0 4px 16px rgba(184, 85, 12, 0.3);
         }
 
         /* ---- HERO ---- */
@@ -181,7 +181,7 @@
             font-size: 1.2rem;
             color: var(--slate);
             line-height: 1.6;
-            max-width: 580px;
+            max-width: 620px;
             margin-bottom: 36px;
         }
 
@@ -225,9 +225,9 @@
         }
 
         .cta-primary:hover {
-            background: #155a3e;
+            background: #98460a;
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(26, 107, 74, 0.35);
+            box-shadow: 0 8px 32px rgba(184, 85, 12, 0.35);
         }
 
         .cta-primary:active { transform: translateY(0); }
@@ -255,19 +255,63 @@
         }
 
         @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 201, 122, 0.4); }
-            50% { box-shadow: 0 0 20px 4px rgba(34, 201, 122, 0.25); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 20px 4px rgba(245, 158, 11, 0.25); }
         }
 
         .cta-demo:hover {
-            background: #1de080;
+            background: #fbbf24;
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(34, 201, 122, 0.4);
+            box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4);
         }
 
         .cta-demo:active { transform: translateY(0); }
         .cta-demo .arrow { transition: transform 0.25s ease; }
         .cta-demo:hover .arrow { transform: translateX(3px); }
+
+        /* Vapi browser widget button (uses .cta-demo for base styling) */
+        .cta-demo.vapi-call-btn {
+            border: none;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .cta-demo.vapi-call-btn[data-state="connecting"] {
+            opacity: 0.75;
+            cursor: wait;
+        }
+
+        .cta-demo.vapi-call-btn[data-state="active"] {
+            background: var(--danger);
+            color: #fff;
+            animation: vapiActivePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes vapiActivePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5); }
+            50% { box-shadow: 0 0 22px 6px rgba(220, 53, 69, 0.3); }
+        }
+
+        .vapi-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--ink);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .cta-demo.vapi-call-btn[data-state="active"] .vapi-dot {
+            background: #fff;
+            animation: vapiDotBlink 0.9s ease-in-out infinite;
+        }
+
+        @keyframes vapiDotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
 
         .cta-subtext {
             font-size: 0.85rem;
@@ -404,6 +448,69 @@
             font-weight: 600;
         }
 
+        /* ---- RESEARCH CALLOUT ---- */
+        .research {
+            padding: 100px 40px;
+            background: var(--warm);
+        }
+
+        .research-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 56px;
+            align-items: center;
+        }
+
+        .research-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .research-stat {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .research-stat-label {
+            font-size: 1rem;
+            color: var(--slate);
+            line-height: 1.5;
+        }
+
+        .research-body h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .research-body p {
+            font-size: 1rem;
+            color: var(--slate);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .research-body p:last-child { margin-bottom: 0; }
+
+        .research-body cite {
+            font-style: normal;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
         /* ---- COMPARISON ---- */
         .comparison {
             padding: 120px 40px;
@@ -505,7 +612,7 @@
         }
 
         .comparison-table tbody td.highlight {
-            background: rgba(26, 107, 74, 0.03);
+            background: rgba(184, 85, 12, 0.04);
             color: var(--ink);
             font-weight: 500;
         }
@@ -579,7 +686,7 @@
             font-size: 1rem;
             color: var(--slate);
             line-height: 1.6;
-            max-width: 560px;
+            max-width: 580px;
         }
 
         /* ---- MID CTA ---- */
@@ -617,6 +724,294 @@
             justify-content: center;
             gap: 16px;
             flex-wrap: wrap;
+        }
+
+        /* ---- CALCULATOR ---- */
+        .calculator {
+            padding: 120px 40px;
+            background: var(--surface);
+        }
+
+        .calc-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .calc-head {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .calc-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .calc-head h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .calc-anchor {
+            max-width: 680px;
+            margin: 20px auto 0;
+            padding: 14px 22px;
+            background: var(--accent-light);
+            color: var(--ink);
+            border-radius: 100px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .calc-anchor strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .calc-controls {
+            background: #fff;
+            border-radius: 16px;
+            padding: 36px 36px 28px;
+            border: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .calc-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .calc-row-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calc-row-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--ink);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .calc-value-chip {
+            background: var(--surface);
+            color: var(--ink);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+            min-width: 64px;
+            text-align: center;
+        }
+
+        .calc-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.08);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .calc-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(184, 85, 12, 0.25);
+            transition: transform 0.15s ease;
+        }
+
+        .calc-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        .calc-slider::-webkit-slider-thumb:active { transform: scale(0.95); }
+
+        .calc-slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(184, 85, 12, 0.25);
+        }
+
+        .calc-range {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .calc-period {
+            display: flex;
+            background: var(--surface);
+            border-radius: 100px;
+            padding: 4px;
+        }
+
+        .calc-period button {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--slate);
+            padding: 10px 12px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calc-period button.active {
+            background: #fff;
+            color: var(--ink);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            font-weight: 600;
+        }
+
+        .calc-results {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-card {
+            border-radius: 16px;
+            padding: 28px 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .result-card.lost { background: #fff; }
+        .result-card.recovered { background: var(--accent); border-color: var(--accent); }
+
+        .result-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .result-tag .pill {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .result-card.lost .result-tag { color: var(--danger); }
+        .result-card.lost .result-tag .pill { background: var(--danger); }
+        .result-card.recovered .result-tag { color: rgba(255,255,255,0.85); }
+        .result-card.recovered .result-tag .pill { background: var(--glow); }
+
+        .result-sub {
+            font-size: 0.95rem;
+            color: var(--slate);
+            margin-bottom: 12px;
+        }
+
+        .result-card.recovered .result-sub { color: rgba(255,255,255,0.8); }
+
+        .result-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+
+        .result-card.lost .result-amount { color: var(--danger); }
+        .result-card.recovered .result-amount { color: #fff; }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .result-card.recovered .result-meta { border-top-color: rgba(255,255,255,0.2); }
+
+        .result-meta-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .result-card.lost .result-meta-icon { background: var(--danger-light); }
+        .result-card.recovered .result-meta-icon { background: rgba(255,255,255,0.15); }
+
+        .result-meta-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-meta-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .result-card.recovered .result-meta-num { color: #fff; }
+
+        .result-meta-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .result-card.recovered .result-meta-label { color: rgba(255,255,255,0.75); }
+
+        .calc-footnote {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 32px;
+            line-height: 1.5;
         }
 
         /* ---- REVENUE ---- */
@@ -695,7 +1090,7 @@
         }
 
         .rev-total .rev-label {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.85);
             font-weight: 500;
         }
 
@@ -768,14 +1163,14 @@
             color: #fff;
             letter-spacing: -1.5px;
             line-height: 1.15;
-            max-width: 700px;
+            max-width: 720px;
             margin: 0 auto 24px;
         }
 
         .closing p {
             font-size: 1.1rem;
             color: rgba(255,255,255,0.5);
-            max-width: 520px;
+            max-width: 560px;
             margin: 0 auto 48px;
             line-height: 1.6;
         }
@@ -807,7 +1202,7 @@
         .cta-closing:hover {
             background: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 8px 40px rgba(34, 201, 122, 0.3);
+            box-shadow: 0 8px 40px rgba(245, 158, 11, 0.3);
         }
 
         .cta-closing:active { transform: translateY(0); }
@@ -875,6 +1270,9 @@
             .problem { padding: 80px 20px; }
             .problem-grid { grid-template-columns: 1fr; gap: 12px; }
 
+            .research { padding: 70px 20px; }
+            .research-inner { grid-template-columns: 1fr; gap: 32px; }
+
             .comparison { padding: 80px 20px; }
             .comparison-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
             .comparison-table { min-width: 600px; font-size: 0.85rem; }
@@ -889,6 +1287,14 @@
             .mid-cta-row { flex-direction: column; align-items: stretch; }
             .mid-cta-row .cta-primary,
             .mid-cta-row .cta-demo { width: 100%; justify-content: center; }
+
+            .calculator { padding: 70px 20px; }
+            .calc-head { margin-bottom: 36px; }
+            .calc-grid { grid-template-columns: 1fr; gap: 16px; }
+            .calc-controls { padding: 24px 22px; gap: 22px; }
+            .calc-period button { font-size: 0.8rem; padding: 9px 8px; }
+            .result-card { padding: 24px 24px; }
+            .result-amount { font-size: 2.4rem; letter-spacing: -1.5px; }
 
             .revenue { padding: 80px 20px; }
             .revenue-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -906,10 +1312,10 @@
 </head>
 <body>
     <nav>
-        <div class="logo">Physio<span>Voice</span></div>
+        <div class="logo">Reserve<span>Voice</span></div>
         <div class="nav-right">
-            <div class="nav-tag">AI Front Desk</div>
-            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="nav-cta-demo">Try Live Demo</a>
+            <div class="nav-tag">AI Reservation Desk</div>
+            <a href="tel:+17076707087" class="nav-cta-demo">Call the Demo</a>
             <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="nav-cta">Book a Demo</a>
         </div>
     </nav>
@@ -918,27 +1324,28 @@
     <section class="hero">
         <div class="hero-badge">
             <span class="dot"></span>
-            Built for Canadian clinics
+            Built for busy restaurants
         </div>
-        <h1>The AI receptionist built for <em>Canadian physio</em> clinics</h1>
-        <p class="hero-sub">No per-call surprises. <strong>One flat monthly fee.</strong> PhysioVoice answers your phone 24/7, books appointments, and reduces no-shows &mdash; purpose-built for physiotherapy.</p>
+        <h1>The AI receptionist that <em>answers every reservation call</em>, even after hours.</h1>
+        <p class="hero-sub">A hungry diner calls. Nobody picks up. They scroll Google and book the next place on the list. <strong>ReserveVoice answers in one ring</strong>, takes the reservation, and drops it straight into your book. 24/7, in any language your guests speak. One flat monthly fee.</p>
         <div class="hero-cta-row">
-            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-demo">Test the App Live <span class="arrow">&#9656;</span></a>
+            <button type="button" class="cta-demo vapi-call-btn" data-state="idle"><span class="vapi-dot"></span> <span class="vapi-label">Talk to the AI in Your Browser</span></button>
+            <a href="tel:+17076707087" class="cta-demo">&#9742; Call (707) 670-7087</a>
             <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-primary">Book a Free 20-Min Intro Call <span class="arrow">&rarr;</span></a>
         </div>
-        <span class="cta-subtext">Talk to the AI yourself &middot; No commitment &middot; See it in action</span>
+        <span class="cta-subtext">Talk to the AI right now in your browser, or call from your phone. No commitment. Your mic stays off until you click.</span>
         <div class="hero-stat-row">
             <div class="hero-stat">
                 <span class="num">24/7</span>
-                <span class="label">Call coverage</span>
+                <span class="label">Always picks up the phone</span>
             </div>
             <div class="hero-stat">
-                <span class="num">$89K+</span>
-                <span class="label">Revenue recovered / year</span>
+                <span class="num">$87K+</span>
+                <span class="label">Reservations recovered per year</span>
             </div>
             <div class="hero-stat">
-                <span class="num">15-31%</span>
-                <span class="label">No-show rate eliminated</span>
+                <span class="num">5 min</span>
+                <span class="label">Window before they book elsewhere</span>
             </div>
         </div>
     </section>
@@ -947,24 +1354,24 @@
     <section class="trust-bar">
         <div class="trust-bar-inner">
             <div class="trust-badge">
-                <span class="trust-icon">&#128274;</span>
-                PIPEDA Compliant
-            </div>
-            <div class="trust-badge">
-                <span class="trust-icon">&#127973;</span>
-                HIPAA-Ready
-            </div>
-            <div class="trust-badge">
                 <span class="trust-icon">&#128337;</span>
-                24/7 Availability
+                Answers 24/7
             </div>
             <div class="trust-badge">
-                <span class="trust-icon">&#128197;</span>
-                Cal.com Integration
+                <span class="trust-icon">&#127869;</span>
+                OpenTable, Resy &amp; Tock ready
             </div>
             <div class="trust-badge">
-                <span class="trust-icon">&#127464;&#127462;</span>
-                Canada-First
+                <span class="trust-icon">&#127760;</span>
+                Multilingual
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#128241;</span>
+                SMS confirmations &amp; reminders
+            </div>
+            <div class="trust-badge">
+                <span class="trust-icon">&#9889;</span>
+                Live in 48 hours
             </div>
         </div>
     </section>
@@ -973,23 +1380,41 @@
     <section class="problem">
         <div class="problem-inner">
             <div class="problem-label">The problem</div>
-            <h2>Your front desk is your biggest bottleneck. Every missed call is a missed patient.</h2>
+            <h2>Every missed call after hours or during service is a table you will not seat tonight.</h2>
             <div class="problem-grid">
                 <div class="problem-card">
                     <span class="icon">&#128222;</span>
-                    <h3>Missed after-hours calls</h3>
-                    <p>Clinics lose <span class="stat-highlight">20-30% of potential bookings</span> to voicemail. Patients who call after hours rarely call back &mdash; they book with whoever answers.</p>
+                    <h3>After-hours calls vanish</h3>
+                    <p>A diner finds you on Google at 9pm and calls to book for tomorrow. Voicemail. They tap back, call the next restaurant on the list, and book there. You learn about it the next morning when you check messages. <span class="stat-highlight">That booking is gone for good.</span></p>
                 </div>
                 <div class="problem-card">
-                    <span class="icon">&#128683;</span>
-                    <h3>No-shows drain revenue</h3>
-                    <p>No-show rates of <span class="stat-highlight">15-31% cost clinics thousands monthly</span>. That's revenue evaporating every single week.</p>
+                    <span class="icon">&#127869;</span>
+                    <h3>The dinner-rush blackout</h3>
+                    <p>Your host is seating tables, walking parties to the bar, and running drinks. The phone is the first thing dropped. <span class="stat-highlight">Reservation calls go straight to voicemail right when you are at your busiest</span>, and rarely get returned in time.</p>
                 </div>
                 <div class="problem-card">
                     <span class="icon">&#9201;</span>
-                    <h3>Staff stretched thin</h3>
-                    <p>Your receptionist handles check-ins, billing, and phones simultaneously. Something always gets dropped &mdash; and it's usually the phone.</p>
+                    <h3>The 5-minute window closes fast</h3>
+                    <p>Research on inbound phone and web inquiries shows the same pattern: callers are <span class="stat-highlight">far less likely to book if they wait more than a few minutes for a callback</span>. By the time your host calls back, the table is already booked somewhere else.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== RESEARCH CALLOUT ===== -->
+    <section class="research">
+        <div class="research-inner">
+            <div>
+                <div class="research-label">The research</div>
+                <div class="research-stat">5 min</div>
+                <div class="research-stat-label">The window where most missed callers can still be won back. After that, they have already booked elsewhere.</div>
+            </div>
+            <div class="research-body">
+                <h3>Speed of response is the single biggest factor in whether a caller becomes a booking.</h3>
+                <p>Multiple studies of inbound phone and web inquiries (Harvard Business Review, MIT, and the Lead Response Management Study among them) have shown a sharp drop in conversion when callers are not reached quickly. Plain English: the faster you pick up, the more likely they book. Wait an hour and most of them are already eating somewhere else.</p>
+                <p>For a restaurant, "speed of response" really means one thing: <strong>did the phone get answered.</strong> Voicemail is not a response. A callback the next morning is not a response.</p>
+                <p>ReserveVoice answers in one ring, every time. The 5-minute window never closes because there is no window to begin with.</p>
+                <cite>Sources: HBR (Oldroyd et al.), Lead Response Management Study, MIT inbound response timing research.</cite>
             </div>
         </div>
     </section>
@@ -997,15 +1422,15 @@
     <!-- ===== COMPETITOR COMPARISON ===== -->
     <section class="comparison">
         <div class="comparison-inner">
-            <div class="comparison-label">Why PhysioVoice</div>
-            <h2>Not another generic AI. Built specifically for physio.</h2>
-            <p class="comparison-subtitle">Generic voice AI doesn't understand physiotherapy scheduling, intake, or compliance. Traditional answering services cost more and do less. Here's how we compare.</p>
+            <div class="comparison-label">Why ReserveVoice</div>
+            <h2>Not another generic phone bot. Built specifically for restaurants.</h2>
+            <p class="comparison-subtitle">Generic voice AI does not understand reservations, party sizes, dietary notes, or how to sync to your book. Traditional answering services cost more and only take messages. Here is how the three options compare.</p>
             <div class="comparison-table-wrap">
             <table class="comparison-table">
                 <thead>
                     <tr>
                         <th></th>
-                        <th class="highlight">PhysioVoice</th>
+                        <th class="highlight">ReserveVoice</th>
                         <th>Generic Voice AI</th>
                         <th>Traditional Answering Service</th>
                     </tr>
@@ -1013,43 +1438,49 @@
                 <tbody>
                     <tr>
                         <td>Monthly cost</td>
-                        <td class="highlight"><strong>Flat rate</strong> &mdash; no per-call fees</td>
-                        <td>$0.10-$1.00+ per minute<br><span style="font-size:0.8rem;color:var(--muted);">Costs spike with volume</span></td>
-                        <td>$300-$1,200/mo<br><span style="font-size:0.8rem;color:var(--muted);">+ overage charges</span></td>
+                        <td class="highlight"><strong>Flat rate.</strong> No per-call fees.</td>
+                        <td>$0.10 to $1.00+ per minute<br><span style="font-size:0.8rem;color:var(--muted);">Cost spikes on busy nights</span></td>
+                        <td>$300 to $1,200 per month<br><span style="font-size:0.8rem;color:var(--muted);">Plus overage charges</span></td>
                     </tr>
                     <tr>
                         <td>Availability</td>
-                        <td class="highlight"><span class="check">&#10003;</span> 24/7/365</td>
+                        <td class="highlight"><span class="check">&#10003;</span> 24/7/365, picks up in one ring</td>
                         <td><span class="check">&#10003;</span> 24/7</td>
-                        <td><span class="partial">~</span> Business hours + limited after-hours</td>
+                        <td><span class="partial">~</span> Business hours, limited after-hours coverage</td>
                     </tr>
                     <tr>
-                        <td>Physio specialization</td>
-                        <td class="highlight"><span class="check">&#10003;</span> Purpose-built for physiotherapy</td>
-                        <td><span class="cross">&#10007;</span> Generic scripts, no clinical knowledge</td>
-                        <td><span class="cross">&#10007;</span> General scripts</td>
+                        <td>Restaurant specialization</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Knows party sizes, dietary notes, walk-in policy, dress code</td>
+                        <td><span class="cross">&#10007;</span> Generic scripts, no hospitality context</td>
+                        <td><span class="cross">&#10007;</span> Reads a generic script</td>
                     </tr>
                     <tr>
-                        <td>Live appointment booking</td>
-                        <td class="highlight"><span class="check">&#10003;</span> Books directly into your calendar</td>
-                        <td><span class="partial">~</span> Requires custom integration</td>
-                        <td><span class="cross">&#10007;</span> Takes messages only</td>
+                        <td>Live reservation booking</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Books directly into OpenTable, Resy, SevenRooms, Tock, or Google Calendar</td>
+                        <td><span class="partial">~</span> Needs custom integration work</td>
+                        <td><span class="cross">&#10007;</span> Takes a message, you call them back</td>
+                    </tr>
+                    <tr>
+                        <td>Multilingual</td>
+                        <td class="highlight"><span class="check">&#10003;</span> English, French, Hindi, Punjabi, Mandarin, Spanish, and more</td>
+                        <td><span class="partial">~</span> English default, others vary</td>
+                        <td><span class="cross">&#10007;</span> English only in most cases</td>
                     </tr>
                     <tr>
                         <td>No-show reduction</td>
-                        <td class="highlight"><span class="check">&#10003;</span> Automated voice + SMS reminders</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Automatic SMS confirmation and reminder before the booking</td>
                         <td><span class="cross">&#10007;</span> Not included</td>
                         <td><span class="cross">&#10007;</span> Not included</td>
                     </tr>
                     <tr>
-                        <td>PIPEDA compliance</td>
-                        <td class="highlight"><span class="check">&#10003;</span> Built-in for Canadian clinics</td>
-                        <td><span class="cross">&#10007;</span> US-focused, not Canadian-compliant</td>
-                        <td><span class="partial">~</span> Varies by provider</td>
+                        <td>Hands off to staff when needed</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Transfers large parties, private events, complaints to a human</td>
+                        <td><span class="partial">~</span> Sometimes, with extra setup</td>
+                        <td><span class="check">&#10003;</span> Yes, but every call is a message</td>
                     </tr>
                     <tr>
-                        <td>Call transcripts &amp; analytics</td>
-                        <td class="highlight"><span class="check">&#10003;</span> Full dashboard + audit trail</td>
+                        <td>Call transcripts and analytics</td>
+                        <td class="highlight"><span class="check">&#10003;</span> Full dashboard, audio, transcript, and booking outcome</td>
                         <td><span class="partial">~</span> Basic logging</td>
                         <td><span class="cross">&#10007;</span> Summary notes only</td>
                     </tr>
@@ -1057,7 +1488,7 @@
                         <td>Setup time</td>
                         <td class="highlight">Under 48 hours</td>
                         <td>Days to weeks of configuration</td>
-                        <td>1-2 weeks onboarding</td>
+                        <td>1 to 2 weeks of onboarding</td>
                     </tr>
                 </tbody>
             </table>
@@ -1069,34 +1500,34 @@
     <section class="how">
         <div class="how-inner">
             <div class="how-label">How it works</div>
-            <h2>An AI that speaks physio and never takes a sick day</h2>
+            <h2>An AI host that speaks restaurant and never goes on break.</h2>
             <div class="how-steps">
                 <div class="how-step">
                     <span class="step-num">01</span>
                     <div class="step-content">
-                        <h3>Answers every call</h3>
-                        <p>PhysioVoice picks up instantly with a natural, conversational voice. During hours, after hours, holidays. Patients talk to an AI that understands physiotherapy scheduling, services, and common questions.</p>
+                        <h3>Picks up in one ring</h3>
+                        <p>ReserveVoice answers instantly with a natural, warm voice. Dinner rush, after close, holidays, Sunday brunch chaos. The caller hears a real conversation, not a phone tree.</p>
                     </div>
                 </div>
                 <div class="how-step">
                     <span class="step-num">02</span>
                     <div class="step-content">
-                        <h3>Books appointments live</h3>
-                        <p>Connected to your calendar in real-time via Cal.com. The AI checks availability, confirms the booking, and sends confirmation. No double-bookings. No phone tag.</p>
+                        <h3>Takes the reservation live</h3>
+                        <p>Asks for name, party size, time, any allergies or special requests, then checks live availability and books it into your reservation system. OpenTable, Resy, SevenRooms, Tock, or a simple Google Calendar. No double-bookings, no phone tag.</p>
                     </div>
                 </div>
                 <div class="how-step">
                     <span class="step-num">03</span>
                     <div class="step-content">
-                        <h3>Reduces no-shows</h3>
-                        <p>Automated voice and SMS reminders before every appointment. Patients who need to reschedule do it through the AI instead of just not showing up.</p>
+                        <h3>Confirms and reminds by SMS</h3>
+                        <p>A text confirmation lands on the diner's phone within seconds. A reminder goes out before the booking. If they need to reschedule, they reply and the AI handles it. No-shows drop because nobody forgets.</p>
                     </div>
                 </div>
                 <div class="how-step">
                     <span class="step-num">04</span>
                     <div class="step-content">
-                        <h3>Hands off when needed</h3>
-                        <p>Complex questions or urgent matters get seamlessly transferred to your staff. Every call is logged, transcribed, and audit-ready in your dashboard.</p>
+                        <h3>Hands off to staff when needed</h3>
+                        <p>Private events, parties over 12, complaints, or anything outside the script get transferred to a manager or your floor phone. Every call is logged with a full transcript and recording for review.</p>
                     </div>
                 </div>
             </div>
@@ -1106,43 +1537,212 @@
     <!-- ===== MID-PAGE CTA ===== -->
     <section class="mid-cta">
         <div class="mid-cta-inner">
-            <h2>Hear PhysioVoice answer a call yourself</h2>
-            <p>Try the live demo &mdash; ask it about booking, services, or availability. Then let's talk about your clinic.</p>
+            <h2>Hear ReserveVoice take a reservation yourself</h2>
+            <p>Talk to the AI right here in your browser, or grab your phone and dial <strong>(707) 670-7087</strong>. Ask about availability, request a table for four with a peanut allergy, see how it sounds. Then let's talk about your restaurant.</p>
             <div class="mid-cta-row">
-                <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-demo">Test the App Live <span class="arrow">&#9656;</span></a>
+                <button type="button" class="cta-demo vapi-call-btn" data-state="idle"><span class="vapi-dot"></span> <span class="vapi-label">Talk to the AI in Your Browser</span></button>
+                <a href="tel:+17076707087" class="cta-demo">&#9742; Call (707) 670-7087</a>
                 <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-primary">Book a Free Intro Call <span class="arrow">&rarr;</span></a>
             </div>
         </div>
     </section>
+
+    <!-- ===== REVENUE LOSS CALCULATOR ===== -->
+    <section class="calculator" id="calculator">
+        <div class="calc-inner">
+            <div class="calc-head">
+                <div class="calc-label">Revenue loss calculator</div>
+                <h2>How much are missed reservation calls costing your restaurant?</h2>
+                <p class="calc-anchor"><strong>Starting point:</strong> just 1 missed reservation per month. Drag the sliders below to match what you think your restaurant actually misses.</p>
+            </div>
+            <div class="calc-grid">
+                <div class="calc-controls">
+                    <div class="calc-row">
+                        <div class="calc-row-head">
+                            <span class="calc-row-label">Missed reservation calls per month</span>
+                            <span class="calc-value-chip" id="calcMissedValue">1</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calcMissed" min="1" max="300" step="1" value="1">
+                        <div class="calc-range"><span>1</span><span>300</span></div>
+                    </div>
+
+                    <div class="calc-row">
+                        <div class="calc-row-head">
+                            <span class="calc-row-label">Callers who would book</span>
+                            <span class="calc-value-chip" id="calcConvertValue">100%</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calcConvert" min="20" max="100" step="5" value="100">
+                        <div class="calc-range"><span>20%</span><span>100%</span></div>
+                    </div>
+
+                    <div class="calc-row">
+                        <div class="calc-row-head">
+                            <span class="calc-row-label">Average reservation value</span>
+                            <span class="calc-value-chip" id="calcValueValue">$140</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calcValue" min="40" max="500" step="10" value="140">
+                        <div class="calc-range"><span>$40</span><span>$500</span></div>
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <div class="calc-period" id="calcPeriod" role="tablist">
+                        <button type="button" data-period="monthly" class="active">Monthly</button>
+                        <button type="button" data-period="yearly">Yearly</button>
+                    </div>
+                    <div class="result-card lost">
+                        <div class="result-tag"><span class="pill"></span> Revenue lost</div>
+                        <div class="result-sub" id="resultLostSub">Per month</div>
+                        <div class="result-amount" id="resultLostAmount">$140</div>
+                        <div class="result-meta">
+                            <div class="result-meta-icon">&#128222;</div>
+                            <div class="result-meta-text">
+                                <span class="result-meta-num" id="resultLostCalls">1</span>
+                                <span class="result-meta-label" id="resultLostCallsLabel">missed call per month</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card recovered">
+                        <div class="result-tag"><span class="pill"></span> With ReserveVoice</div>
+                        <div class="result-sub" id="resultRecoveredSub">Revenue recovered per month</div>
+                        <div class="result-amount" id="resultRecoveredAmount">$98</div>
+                        <div class="result-meta">
+                            <div class="result-meta-icon">&#128197;</div>
+                            <div class="result-meta-text">
+                                <span class="result-meta-num" id="resultRecoveredBookings">1</span>
+                                <span class="result-meta-label" id="resultRecoveredBookingsLabel">extra reservation per month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="calc-footnote">This only counts revenue from missed reservation calls. Add no-shows recovered by SMS reminders, repeat-guest lifetime value, and host labor freed up during service and the real number is higher.</p>
+        </div>
+    </section>
+
+    <script>
+    (function() {
+        var PERIODS = {
+            daily:   { monthFactor: 1/30, label: 'day',   sub: 'Per day',   subRecovered: 'Revenue recovered per day' },
+            weekly:  { monthFactor: 7/30, label: 'week',  sub: 'Per week',  subRecovered: 'Revenue recovered per week' },
+            monthly: { monthFactor: 1,    label: 'month', sub: 'Per month', subRecovered: 'Revenue recovered per month' },
+            yearly:  { monthFactor: 12,   label: 'year',  sub: 'Per year',  subRecovered: 'Revenue recovered per year' }
+        };
+        var RECOVERY_RATE = 0.70;
+
+        var missed = document.getElementById('calcMissed');
+        var convert = document.getElementById('calcConvert');
+        var value = document.getElementById('calcValue');
+        var missedV = document.getElementById('calcMissedValue');
+        var convertV = document.getElementById('calcConvertValue');
+        var valueV = document.getElementById('calcValueValue');
+        var periodWrap = document.getElementById('calcPeriod');
+        var lostSub = document.getElementById('resultLostSub');
+        var lostAmount = document.getElementById('resultLostAmount');
+        var lostCalls = document.getElementById('resultLostCalls');
+        var lostCallsLabel = document.getElementById('resultLostCallsLabel');
+        var recoveredSub = document.getElementById('resultRecoveredSub');
+        var recoveredAmount = document.getElementById('resultRecoveredAmount');
+        var recoveredBookings = document.getElementById('resultRecoveredBookings');
+        var recoveredBookingsLabel = document.getElementById('resultRecoveredBookingsLabel');
+
+        var currentPeriod = 'monthly';
+
+        function fmtMoney(n) {
+            if (n >= 1000000) {
+                return '$' + (n / 1000000).toFixed(n >= 10000000 ? 0 : 1) + 'M';
+            }
+            return '$' + Math.round(n).toLocaleString('en-US');
+        }
+
+        function fmtInt(n) {
+            return Math.round(n).toLocaleString('en-US');
+        }
+
+        function update() {
+            var missedPerMonth = parseInt(missed.value, 10);
+            var convertPct = parseInt(convert.value, 10);
+            var avgValue = parseInt(value.value, 10);
+            var period = PERIODS[currentPeriod];
+
+            missedV.textContent = missedPerMonth;
+            convertV.textContent = convertPct + '%';
+            valueV.textContent = '$' + avgValue;
+
+            var callsInPeriod = missedPerMonth * period.monthFactor;
+            var lostBookings = callsInPeriod * (convertPct / 100);
+            var lostRevenue = lostBookings * avgValue;
+            var recoveredRevenue = lostRevenue * RECOVERY_RATE;
+            var recoveredBookingsCount = lostBookings * RECOVERY_RATE;
+
+            var callsDisplay = Math.round(callsInPeriod);
+            var bookingsDisplay = Math.round(recoveredBookingsCount);
+            var callNoun = callsDisplay === 1 ? 'missed call' : 'missed calls';
+            var bookingNoun = bookingsDisplay === 1 ? 'extra reservation' : 'extra reservations';
+
+            lostSub.textContent = period.sub;
+            lostAmount.textContent = fmtMoney(lostRevenue);
+            lostCalls.textContent = fmtInt(callsInPeriod);
+            lostCallsLabel.textContent = callNoun + ' per ' + period.label;
+
+            recoveredSub.textContent = period.subRecovered;
+            recoveredAmount.textContent = fmtMoney(recoveredRevenue);
+            recoveredBookings.textContent = fmtInt(recoveredBookingsCount);
+            recoveredBookingsLabel.textContent = bookingNoun + ' per ' + period.label;
+        }
+
+        missed.addEventListener('input', update);
+        convert.addEventListener('input', update);
+        value.addEventListener('input', update);
+
+        periodWrap.addEventListener('click', function(e) {
+            var btn = e.target.closest('button[data-period]');
+            if (!btn) return;
+            currentPeriod = btn.getAttribute('data-period');
+            periodWrap.querySelectorAll('button').forEach(function(b) {
+                b.classList.toggle('active', b === btn);
+            });
+            update();
+        });
+
+        update();
+    })();
+    </script>
 
     <!-- ===== REVENUE ===== -->
     <section class="revenue">
         <div class="revenue-inner">
             <div class="revenue-text">
                 <div class="revenue-label">The math</div>
-                <h2><em>$89,000+</em> recovered per year</h2>
-                <p>PhysioVoice doesn't just save time. It captures revenue your clinic is currently losing to missed calls, no-shows, and after-hours silence. The ROI pays for itself within months &mdash; not years.</p>
+                <h2><em>$87,000+</em> recovered per year</h2>
+                <p>ReserveVoice does not just answer phones. It captures revenue your restaurant is already losing to missed calls, voicemail, no-shows, and a host stretched too thin to handle the rush. Most operators see ROI in the first two to three months.</p>
+                <p style="margin-top:14px;font-size:0.85rem;color:var(--muted);">Based on an average independent restaurant: party of 3, $35 per person, 8 missed or unreturned calls per week. Your numbers will vary.</p>
             </div>
             <div class="revenue-breakdown">
                 <div class="rev-item">
-                    <span class="rev-label">Front desk labor savings</span>
+                    <span class="rev-label">After-hours reservations captured</span>
+                    <span class="rev-amount">$27,000+</span>
+                </div>
+                <div class="rev-item">
+                    <span class="rev-label">Dinner-rush reservations captured</span>
+                    <span class="rev-amount">$19,000+</span>
+                </div>
+                <div class="rev-item">
+                    <span class="rev-label">No-shows recovered (SMS reminders)</span>
                     <span class="rev-amount">$11,000+</span>
                 </div>
                 <div class="rev-item">
-                    <span class="rev-label">After-hours sessions captured</span>
-                    <span class="rev-amount">$28,000+</span>
+                    <span class="rev-label">Front-of-house labor freed up</span>
+                    <span class="rev-amount">$9,000+</span>
                 </div>
                 <div class="rev-item">
-                    <span class="rev-label">No-shows recovered</span>
-                    <span class="rev-amount">$14,000+</span>
-                </div>
-                <div class="rev-item">
-                    <span class="rev-label">New patient lifetime value</span>
-                    <span class="rev-amount">$34,000+</span>
+                    <span class="rev-label">Repeat-guest lifetime value</span>
+                    <span class="rev-amount">$21,000+</span>
                 </div>
                 <div class="rev-item rev-total">
                     <span class="rev-label">Total annual impact</span>
-                    <span class="rev-amount">$89,000+</span>
+                    <span class="rev-amount">$87,000+</span>
                 </div>
             </div>
         </div>
@@ -1152,52 +1752,115 @@
     <section class="faq">
         <div class="faq-inner">
             <div class="faq-label">Common questions</div>
-            <h2>Everything you need to know</h2>
+            <h2>Everything a restaurant owner asks before they sign up.</h2>
 
             <div class="faq-item">
-                <h3>How is PhysioVoice different from generic voice AI like Bland.ai or Vapi?</h3>
-                <p>Generic voice AI platforms require you to build your own scripts, integrations, and compliance. PhysioVoice is purpose-built for Canadian physiotherapy &mdash; it understands your scheduling, intake flows, and PIPEDA requirements out of the box. Plus, we charge a flat rate. No per-minute billing that spikes with volume.</p>
+                <h3>Will it sound like a robot? My guests will hate that.</h3>
+                <p>Try the live demo and judge for yourself. The voice is warm, natural, and conversational. Most callers do not realize they are speaking to an AI until you tell them. If a guest insists on a human, the AI hands off to your floor phone.</p>
             </div>
 
             <div class="faq-item">
-                <h3>What does "flat rate" mean? Are there really no per-call charges?</h3>
-                <p>One monthly fee. Unlimited calls. No per-minute billing, no overage charges, no surprise invoices. Your cost is the same whether you get 50 calls or 500.</p>
+                <h3>Does it work with my reservation system?</h3>
+                <p>Yes. ReserveVoice integrates with OpenTable, Resy, SevenRooms, Tock, and plain Google Calendar. If you take reservations by pen and paper today, we can set you up on Google Calendar in an afternoon.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Is PhysioVoice compliant with Canadian privacy regulations?</h3>
-                <p>Yes. PhysioVoice is built PIPEDA-compliant for Canadian healthcare. We also align with HIPAA standards. All call data is encrypted, access-controlled, and audit-ready.</p>
+                <h3>What languages does it speak?</h3>
+                <p>English, French, Spanish, Hindi, Punjabi, Mandarin, Cantonese, Arabic, Portuguese, and more. If your guests speak it, ReserveVoice can answer in it. You pick which languages are active.</p>
             </div>
 
             <div class="faq-item">
-                <h3>How quickly can I get set up?</h3>
-                <p>Most clinics are live within 48 hours. We handle the configuration, connect to your calendar (Cal.com), and customize the AI to your clinic's services and scheduling rules.</p>
+                <h3>What happens when it's busy and someone wants the manager?</h3>
+                <p>ReserveVoice knows when to step aside. Private events, parties over 12, complaints, vendor calls, or anything outside the reservation flow get transferred to a real human at your restaurant. Every call is logged with a transcript.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Can it handle complex patient questions?</h3>
-                <p>For common questions &mdash; availability, services, location, booking &mdash; PhysioVoice handles it. For complex clinical questions or urgent matters, it seamlessly transfers to your staff. Every call is logged with a full transcript.</p>
+                <h3>How does flat-rate pricing actually work?</h3>
+                <p>One monthly fee. Unlimited calls. No per-minute billing, no overage charges, no surprise invoices on a busy Saturday. Your cost is the same whether you get 50 calls a week or 500.</p>
             </div>
 
             <div class="faq-item">
-                <h3>Where does the $89K figure come from?</h3>
-                <p>It's based on the average Canadian physio clinic: recovered after-hours bookings ($28K), reduced no-shows ($14K), new patient lifetime value from captured leads ($34K), and front desk labor savings ($11K). Your mileage may vary, but most clinics see ROI within the first 2-3 months.</p>
+                <h3>How fast can I be live?</h3>
+                <p>Most restaurants are taking real reservations within 48 hours. We handle the setup, connect to your reservation system, train the AI on your hours, menu basics, dress code, parking, and any special policies, and run a test call with you before flipping it on.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Where does the $87K figure come from?</h3>
+                <p>An average independent restaurant: party of 3, $35 per person, 8 missed or unreturned calls per week, plus reduced no-shows from SMS reminders and a small share of repeat-guest lifetime value. Your numbers will be different. We will model your restaurant specifically on the intro call.</p>
             </div>
         </div>
     </section>
 
     <!-- ===== CLOSING ===== -->
     <section class="closing">
-        <h2>Stop losing patients to voicemail</h2>
-        <p>PIPEDA-compliant. HIPAA-aligned. Flat-rate pricing. Built exclusively for Canadian physiotherapy clinics that refuse to lose another patient to a missed call.</p>
+        <h2>Stop sending diners to voicemail. Stop sending them to the restaurant down the street.</h2>
+        <p>Built for restaurants that cannot afford to miss another booking. After hours, during the rush, every call answered. Reservations land in your book. Confirmations go out automatically. One flat monthly fee.</p>
         <div class="closing-cta-row">
-            <a href="https://ian-voice-ai-demo.mahimairaja3.workers.dev/" target="_blank" rel="noopener" class="cta-closing">Test the App Live <span class="arrow">&#9656;</span></a>
+            <a href="tel:+17076707087" class="cta-closing">&#9742; Call (707) 670-7087</a>
             <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-closing-demo">Book Your Free Intro Call <span class="arrow">&rarr;</span></a>
         </div>
     </section>
 
     <footer>
-        <p>PhysioVoice &mdash; AI voice automation for Canadian physiotherapy clinics</p>
+        <p>ReserveVoice. AI reservation desk for independent restaurants.</p>
     </footer>
+
+    <script type="module">
+        const PUBLIC_KEY = "c7d496d8-e4fb-44fe-9ffe-755d41ae32c3";
+        const ASSISTANT_ID = "2a12201f-7617-4955-a3ae-a6efde915a9b";
+
+        const LABELS = {
+            idle: "Talk to the AI in Your Browser",
+            connecting: "Connecting...",
+            active: "End Call",
+            error: "Try Again"
+        };
+
+        let vapi = null;
+        let state = "idle";
+
+        function setState(newState) {
+            state = newState;
+            document.querySelectorAll(".vapi-call-btn").forEach(btn => {
+                btn.dataset.state = newState;
+                const label = btn.querySelector(".vapi-label");
+                if (label) label.textContent = LABELS[newState] || LABELS.idle;
+            });
+        }
+
+        async function loadVapi() {
+            if (vapi) return vapi;
+            const mod = await import("https://cdn.jsdelivr.net/npm/@vapi-ai/web/+esm");
+            const Vapi = mod.default;
+            vapi = new Vapi(PUBLIC_KEY);
+            vapi.on("call-start", () => setState("active"));
+            vapi.on("call-end", () => setState("idle"));
+            vapi.on("error", (e) => {
+                console.error("Vapi error:", e);
+                setState("error");
+            });
+            return vapi;
+        }
+
+        async function handleClick() {
+            if (state === "connecting") return;
+            if (state === "active") {
+                if (vapi) vapi.stop();
+                return;
+            }
+            try {
+                setState("connecting");
+                const v = await loadVapi();
+                await v.start(ASSISTANT_ID);
+            } catch (err) {
+                console.error("Vapi start error:", err);
+                setState("error");
+            }
+        }
+
+        document.querySelectorAll(".vapi-call-btn").forEach(btn => {
+            btn.addEventListener("click", handleClick);
+        });
+    </script>
 </body>
 </html>
