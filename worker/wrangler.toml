@@ -1,0 +1,6 @@
+name = "reservevoice-brain"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# GROQ_API_KEY is set as a secret, never committed:
+#   npx wrangler secret put GROQ_API_KEY
