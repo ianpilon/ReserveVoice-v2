@@ -223,6 +223,7 @@ async function loadVAD() {
   return window.vad.MicVAD.new({
     onSpeechStart,
     onSpeechEnd,
+    onVADMisfire: () => { mark("vad misfire — restoring volume"); unduck(); }, // blip wasn't real speech: undo the duck
     stream: micStream,
     // tuning for a snappier, less twitchy feel:
     positiveSpeechThreshold: 0.7, // higher = quiet speaker echo is less likely to trip a (verified) interrupt
