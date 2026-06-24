@@ -26,6 +26,8 @@ export default {
     if (req.method !== "POST") return new Response("POST only", { status: 405, headers: CORS });
 
     const path = new URL(req.url).pathname;
+    if (path === "/log") return handleLog(req);   // browser beacons timings/errors here so they show in `wrangler tail`
+    console.log("REQ", path);
     if (path === "/stt") return handleSTT(req, env);
     if (path === "/tts") return handleTTS(req, env);
     return handleChat(req, env); // default + "/chat"
@@ -51,6 +53,11 @@ async function handleChat(req, env) {
   return new Response(r.body, { headers: { ...CORS, "Content-Type": "text/event-stream" } });
 }
 
+async function handleLog(req) {
+  try { const b = await req.json(); console.log("CLIENT", b.msg || JSON.stringify(b)); } catch {}
+  return new Response(null, { status: 204, headers: CORS });
+}
+
 async function handleTTS(req, env) {
   let body;
   try { body = await req.json(); } catch { return new Response("Bad JSON", { status: 400, headers: CORS }); }
@@ -59,7 +66,7 @@ async function handleTTS(req, env) {
     headers: { Authorization: `Bearer ${env.GROQ_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({ model: TTS_MODEL, input: body.text || "", voice: body.voice || TTS_VOICE, response_format: "wav" }),
   });
-  if (!r.ok) return new Response(await r.text(), { status: r.status, headers: CORS });
+  if (!r.ok) { const e = await r.text(); console.log("TTS ERROR", r.status, e.slice(0, 200)); return new Response(e, { status: r.status, headers: CORS }); }
   return new Response(r.body, { headers: { ...CORS, "Content-Type": "audio/wav" } });
 }
 

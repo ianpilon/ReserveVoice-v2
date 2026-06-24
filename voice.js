@@ -11,6 +11,7 @@ const BASE =
 const CHAT_URL = BASE + "/chat";
 const STT_URL = BASE + "/stt";
 const TTS_URL = BASE + "/tts";
+const LOG_URL = BASE + "/log";
 const SYSTEM_PROMPT =
   "You are a warm, friendly host at The Copper Fork restaurant, taking a reservation over the phone. " +
   "Sound like a real person: relaxed and conversational, use contractions and natural phrasing, never robotic or clipped. " +
@@ -37,13 +38,18 @@ let speakChain = Promise.resolve();
 // ---- logging (console only; open DevTools or run RV_DUMP() to inspect timings) ----
 let turn = null;
 window.RV_LOG = [];
+function beaconLog(msg) {
+  try { fetch(LOG_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ msg }), keepalive: true }).catch(() => {}); } catch {}
+}
 function mark(stage) {
   const since = turn ? Math.round(performance.now() - turn.t0) : 0;
   window.RV_LOG.push({ stage, sinceYouStoppedMs: since });
   console.log(`[voice] +${since}ms  ${stage}`);
+  beaconLog(`+${since}ms ${stage}`);
 }
 function logError(where, e) {
   console.error("[voice]", `ERROR @${where}:`, e && e.message ? e.message : e, e);
+  beaconLog(`ERROR @${where}: ${e && e.message ? e.message : e}`);
 }
 window.RV_DUMP = () => console.table(window.RV_LOG);
 
