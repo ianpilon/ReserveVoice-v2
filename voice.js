@@ -34,6 +34,7 @@ let currentAudioEl = null;
 let chatController = null;
 let turnGen = 0;
 let speakChain = Promise.resolve();
+let agentSpeechText = ""; // what the agent is currently saying — used to tell real interruptions from echo
 
 // ---- logging (console only; open DevTools or run RV_DUMP() to inspect timings) ----
 let turn = null;
@@ -110,6 +111,7 @@ function stopAgent() {
 // ---- Think (Groq LLM via Worker), streamed + chunked, abortable ----
 async function think(text, gen) {
   history.push({ role: "user", content: text });
+  agentSpeechText = ""; // reset; fills in as this reply streams
   chatController = new AbortController();
   const res = await fetch(CHAT_URL, {
     method: "POST",
@@ -135,7 +137,7 @@ async function think(text, gen) {
       try {
         const delta = JSON.parse(d).choices?.[0]?.delta?.content || "";
         if (delta && !firstTok) { firstTok = true; mark("LLM first token (Groq replied)"); }
-        sentence += delta; full += delta;
+        sentence += delta; full += delta; agentSpeechText = full;
         if (/[.!?]["')\]]?\s*$/.test(sentence) && sentence.trim()) { enqueueSpeech(sentence, gen); sentence = ""; }
       } catch {}
     }
@@ -166,27 +168,54 @@ async function transcribe(f32) {
   return (await res.json()).text || "";
 }
 
+function unduck() { if (currentAudioEl) { try { currentAudioEl.volume = 1.0; } catch {} } }
+
+// Is the heard text just the agent's own voice echoing back, rather than a real interruption?
+function looksLikeEcho(userText, agentText) {
+  const norm = (s) => (s || "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(Boolean);
+  const u = norm(userText);
+  if (u.length === 0) return true;
+  const a = new Set(norm(agentText));
+  const overlap = u.filter((w) => a.has(w)).length / u.length;
+  return overlap >= 0.5; // half+ of the heard words are words the agent is currently saying → echo
+}
+
 function onSpeechStart() {
-  if (agentSpeaking) { mark("you interrupted (barge-in)"); stopAgent(); }
+  // Speech detected. If the agent is talking, duck it (instant feedback + quiets echo) but don't
+  // cut it yet — onSpeechEnd will verify whether it was really you or just the agent echoing.
+  if (agentSpeaking && currentAudioEl) {
+    try { currentAudioEl.volume = 0.18; } catch {}
+    mark("possible interrupt — ducking");
+  }
 }
 
 async function onSpeechEnd(f32) {
-  if (f32.length < 16000 * 0.3) return; // ignore <0.3s blips
-  const gen = ++turnGen;                 // supersede any in-flight turn
-  if (chatController) { try { chatController.abort(); } catch {} chatController = null; }
-  processing = true;
+  if (f32.length < 16000 * 0.3) { unduck(); return; } // ignore <0.3s blips
+  const duringAgent = agentSpeaking;
+  const agentText = agentSpeechText;
+
+  let text = "";
   turn = { t0: performance.now(), firstAudio: false };
-  try {
-    mark("got your audio, transcribing");
-    const text = await transcribe(f32);
-    if (gen !== turnGen) return;
-    if (!text.trim()) { processing = false; return; }
-    mark(`heard you: "${text}"`);
-    await think(text, gen);
-  } catch (e) {
-    if (!e || e.name !== "AbortError") logError("turn", e);
+  mark("got your audio, transcribing");
+  try { text = await transcribe(f32); }
+  catch (e) { logError("stt", e); unduck(); return; }
+
+  // If the agent was speaking, was this really you or just its own voice echoing back?
+  if (duringAgent && looksLikeEcho(text, agentText)) {
+    unduck(); // false alarm — keep talking
+    if (text.trim()) mark(`ignored echo: "${text}"`);
+    return;
   }
-  if (gen === turnGen) processing = false;
+  if (!text.trim()) { unduck(); return; }
+
+  // Real turn (normal or a genuine barge-in): stop the agent and respond.
+  stopAgent();
+  const gen = turnGen;
+  processing = true;
+  mark(`heard you: "${text}"`);
+  try { await think(text, gen); }
+  catch (e) { if (!e || e.name !== "AbortError") logError("turn", e); }
+  finally { processing = false; }
 }
 
 async function loadVAD() {
@@ -196,8 +225,8 @@ async function loadVAD() {
     onSpeechEnd,
     stream: micStream,
     // tuning for a snappier, less twitchy feel:
-    positiveSpeechThreshold: 0.6, // higher = fewer false starts from noise / speaker bleed
-    negativeSpeechThreshold: 0.4,
+    positiveSpeechThreshold: 0.7, // higher = quiet speaker echo is less likely to trip a (verified) interrupt
+    negativeSpeechThreshold: 0.45,
     redemptionFrames: 10,         // silence frames before end-of-speech; higher avoids clipping trailing words on a pause
     minSpeechFrames: 3,           // ignore ultra-short blips
     preSpeechPadFrames: 2,
