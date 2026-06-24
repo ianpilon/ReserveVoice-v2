@@ -215,12 +215,16 @@ async function startCall() {
 
   callActive = true; history = []; turnGen = 0;
   setState("active");
-  vadObj.start();
 
+  // Speak the greeting with the mic NOT yet listening, so the VAD can't trip and invalidate it.
   const gen = ++turnGen;
-  beep();
   await enqueueSpeech(GREETING, gen);
   history.push({ role: "assistant", content: GREETING });
+
+  // Greeting done — now cue the caller and start listening.
+  if (!callActive) return; // user may have hung up during the greeting
+  beep();
+  vadObj.start();
 }
 
 function endCall() {
