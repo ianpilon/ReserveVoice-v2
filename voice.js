@@ -171,8 +171,8 @@ async function transcribe(f32) {
 
 function rms(f32) { let s = 0; for (let i = 0; i < f32.length; i++) s += f32[i] * f32[i]; return Math.sqrt(s / f32.length); }
 const MIN_RMS = 0.006;        // below this is essentially silence/distant noise — don't even transcribe it
-const MAX_NO_SPEECH = 0.6;    // Whisper's own "this isn't speech" probability
-const MIN_AVG_LOGPROB = -0.9; // below this, Whisper isn't confident — likely a hallucination
+const MAX_NO_SPEECH = 0.7;    // Whisper's own "this isn't speech" probability — the reliable junk signal
+const MIN_AVG_LOGPROB = -1.8; // only reject truly garbled audio; real short words (e.g. "tomorrow") sit near -1.1
 
 function unduck() { if (currentAudioEl) { try { currentAudioEl.volume = 1.0; } catch {} } }
 
