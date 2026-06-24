@@ -63,6 +63,28 @@ function setState(s) {
   });
 }
 
+// ---- live phone transcript (hero mockup) ----
+function rvReset() { const c = document.getElementById("rv-chat"); if (c) c.innerHTML = ""; }
+function rvStatus(label, live) {
+  const s = document.getElementById("rv-status");
+  if (s) { s.classList.toggle("live", !!live); s.innerHTML = `<span class="rv-dot"></span> ${label}`; }
+}
+function rvBubble(role, text) {
+  const c = document.getElementById("rv-chat");
+  if (!c || !text || !text.trim()) return;
+  const cls = role === "user" ? "user" : "bot";
+  const last = c.lastElementChild;
+  if (last && last.classList.contains("rv-bubble") && last.classList.contains(cls)) {
+    last.textContent = (last.textContent + " " + text).trim();
+  } else {
+    const d = document.createElement("div");
+    d.className = "rv-bubble " + cls;
+    d.textContent = text.trim();
+    c.appendChild(d);
+  }
+  c.scrollTop = c.scrollHeight;
+}
+
 function beep() {
   try {
     const ctx = beep.ctx || (beep.ctx = new (window.AudioContext || window.webkitAudioContext)());
@@ -91,14 +113,18 @@ async function synth(text, gen) {
   } catch (e) { logError("tts", e); return null; }
 }
 
-async function playAudio(audioPromise, gen) {
+async function playAudio(audioPromise, gen, text) {
   const blob = await audioPromise;
   if (!blob || gen !== turnGen) return; // synth failed or barged-in
   const url = URL.createObjectURL(blob);
   const el = new Audio(url);
   currentAudioEl = el;
   agentSpeaking = true;
-  el.onplaying = () => { if (turn && !turn.firstAudio) { turn.firstAudio = true; mark("first audio plays (you hear it)"); } };
+  el.onplaying = () => {
+    rvStatus("speaking", true);
+    rvBubble("bot", text); // grow the bubble in sync with the chunk being spoken
+    if (turn && !turn.firstAudio) { turn.firstAudio = true; mark("first audio plays (you hear it)"); }
+  };
   await new Promise((res) => { el.onended = el.onerror = res; el.play().catch(res); });
   URL.revokeObjectURL(url);
   if (currentAudioEl === el) { currentAudioEl = null; agentSpeaking = false; lastAgentEndTime = performance.now(); }
@@ -107,7 +133,7 @@ async function playAudio(audioPromise, gen) {
 // Kick off synthesis NOW (parallel, ahead of playback); queue playback to happen in order.
 function enqueueSpeech(text, gen) {
   const audioPromise = synth(text, gen);
-  speakChain = speakChain.then(() => playAudio(audioPromise, gen));
+  speakChain = speakChain.then(() => playAudio(audioPromise, gen, text));
   return speakChain;
 }
 
@@ -156,8 +182,8 @@ async function think(text, gen) {
   }
   if (gen === turnGen && sentence.trim()) enqueueSpeech(sentence, gen);
   history.push({ role: "assistant", content: full });
-  await speakChain;
-  if (gen === turnGen) mark("done speaking (turn complete)");
+  await speakChain; // bubble grows per-chunk in playAudio, synced to speech
+  if (gen === turnGen) { mark("done speaking (turn complete)"); rvStatus("listening", true); }
 }
 
 // ---- Listen (VAD carves the clip → Groq Whisper transcribes) ----
@@ -245,6 +271,8 @@ async function onSpeechEnd(f32) {
   const gen = turnGen;
   processing = true;
   mark(`heard you: "${text}"`);
+  rvBubble("user", text);
+  rvStatus("thinking", true);
   try { await think(text, gen); }
   catch (e) { if (!e || e.name !== "AbortError") logError("turn", e); }
   finally { processing = false; }
@@ -277,11 +305,12 @@ async function startCall() {
 
   callActive = true; history = []; turnGen = 0;
   setState("active");
+  rvReset();
 
   // Speak the greeting with the mic NOT yet listening, so the VAD can't trip and invalidate it.
   const gen = ++turnGen;
   agentSpeechText = GREETING; // so the echo-matcher recognizes the greeting bouncing back
-  await enqueueSpeech(GREETING, gen);
+  await enqueueSpeech(GREETING, gen); // greeting bubble appears when it starts speaking (in playAudio)
   history.push({ role: "assistant", content: GREETING });
 
   // Let the speakers settle so the greeting's tail isn't captured as the caller's first answer.
@@ -291,6 +320,7 @@ async function startCall() {
   if (!callActive) return; // user may have hung up during the greeting
   beep();
   vadObj.start();
+  rvStatus("listening", true);
 }
 
 function endCall() {
@@ -299,6 +329,7 @@ function endCall() {
   if (vadObj) { try { vadObj.pause(); } catch {} }
   if (micStream) { try { micStream.getTracks().forEach((t) => t.stop()); } catch {} micStream = null; }
   setState("idle");
+  rvStatus("standby", false);
 }
 
 async function handleClick() {

@@ -20,6 +20,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+      /* Live transcript inside the hero phone mockup */
+      .rv-bar { display:flex; align-items:center; justify-content:space-between; padding-bottom:10px; margin-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.06); }
+      .rv-brand { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.85rem; color:var(--ink); }
+      .rv-status { font-family:'DM Sans',sans-serif; font-size:0.62rem; color:var(--muted); display:inline-flex; align-items:center; gap:5px; letter-spacing:0.02em; }
+      .rv-dot { width:6px; height:6px; border-radius:50%; background:var(--muted); display:inline-block; flex:none; }
+      .rv-status.live .rv-dot { background:var(--accent); animation:rvpulse 1.4s ease-in-out infinite; }
+      @keyframes rvpulse { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+      .rv-chat { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:7px; padding-right:2px; }
+      .rv-chat::-webkit-scrollbar { width:0; }
+      .rv-bubble { max-width:84%; padding:8px 12px; border-radius:15px; font-size:0.78rem; line-height:1.4; word-wrap:break-word; animation:rvpop .18s ease-out; }
+      .rv-bubble.bot { background:#fff; color:var(--ink); align-self:flex-start; border-bottom-left-radius:5px; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+      .rv-bubble.user { background:var(--accent); color:#fff; align-self:flex-end; border-bottom-right-radius:5px; }
+      @keyframes rvpop { from{opacity:0; transform:translateY(4px) scale(0.98);} to{opacity:1; transform:none;} }
+      .rv-hint { margin:auto; text-align:center; font-size:0.72rem; color:var(--muted); padding:0 18px; line-height:1.5; }
+    </style>
 </head>
 <body>
     <nav>
@@ -45,10 +61,8 @@
                 <p class="hero-sub">A hungry diner calls. Nobody picks up. They scroll Google and book the next place on the list. <strong>ReserveVoice answers in one ring</strong>, takes the reservation, and drops it straight into your book. 24/7, in any language your guests speak. One flat monthly fee.</p>
                 <div class="hero-cta-row">
                     <button type="button" class="cta-demo vapi-call-btn" data-state="idle"><span class="vapi-dot"></span> <span class="vapi-label">Talk to the AI in Your Browser</span></button>
-                    <a href="tel:+17076707087" class="cta-demo">&#9742; Call (707) 670-7087</a>
-                    <a href="https://cal.com/ian-pilon/physiovoice-20-min-intro-call" target="_blank" rel="noopener" class="cta-primary">Book a Free 20-Min Meeting <span class="arrow">&rarr;</span></a>
                 </div>
-                <span class="cta-subtext">Talk to the AI right now in your browser, or call from your phone. No commitment. Your mic stays off until you click.</span>
+                <span class="cta-subtext">Talk to the AI right now in your browser. No commitment. Your mic stays off until you click.</span>
                 <div class="hero-stat-row">
                     <div class="hero-stat">
                         <span class="num">24/7</span>
@@ -67,14 +81,13 @@
             <div class="hero-visual">
                 <div class="phone-mockup">
                     <div class="phone-screen">
-                        <div class="sms-header">
-                            The Grand Mehfil
-                            <div class="sms-header-sub">Today, 9:14 PM</div>
+                        <div class="rv-bar">
+                            <span class="rv-brand">The Copper Fork</span>
+                            <span class="rv-status" id="rv-status"><span class="rv-dot"></span> standby</span>
                         </div>
-                        <div class="sms-message">Hi Sara! Confirming your reservation for 4 on Saturday at 7:30 PM. Reply Y to confirm.</div>
-                        <div class="sms-message reply">Y</div>
-                        <div class="sms-message">Confirmed. See you Saturday. We've noted the nut allergy for the kitchen.</div>
-                        <div class="sms-time">Delivered via ReserveVoice</div>
+                        <div class="rv-chat" id="rv-chat">
+                            <div class="rv-hint" id="rv-hint">Tap “Talk to the AI” — your conversation shows up here as you speak.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -473,6 +486,6 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.wasm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/bundle.min.js"></script>
-    <script type="module" src="voice.js?v=d10"></script>
+    <script type="module" src="voice.js?v=13"></script>
 </body>
 </html>
