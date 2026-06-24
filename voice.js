@@ -165,8 +165,14 @@ function encodeWav(f32, rate = 16000) {
 async function transcribe(f32) {
   const res = await fetch(STT_URL, { method: "POST", headers: { "Content-Type": "application/octet-stream" }, body: encodeWav(f32) });
   if (!res.ok) throw new Error("stt " + res.status);
-  return (await res.json()).text || "";
+  const j = await res.json();
+  return { text: j.text || "", noSpeechProb: j.noSpeechProb ?? 0, avgLogprob: j.avgLogprob ?? 0 };
 }
+
+function rms(f32) { let s = 0; for (let i = 0; i < f32.length; i++) s += f32[i] * f32[i]; return Math.sqrt(s / f32.length); }
+const MIN_RMS = 0.006;        // below this is essentially silence/distant noise — don't even transcribe it
+const MAX_NO_SPEECH = 0.6;    // Whisper's own "this isn't speech" probability
+const MIN_AVG_LOGPROB = -0.9; // below this, Whisper isn't confident — likely a hallucination
 
 function unduck() { if (currentAudioEl) { try { currentAudioEl.volume = 1.0; } catch {} } }
 
@@ -191,14 +197,27 @@ function onSpeechStart() {
 
 async function onSpeechEnd(f32) {
   if (f32.length < 16000 * 0.3) { unduck(); return; } // ignore <0.3s blips
+
+  // Loudness gate: quiet/distant noise never becomes a turn (and saves an STT call).
+  const level = rms(f32);
+  if (level < MIN_RMS) { unduck(); mark(`ignored quiet clip (rms ${level.toFixed(3)})`); return; }
+
   const duringAgent = agentSpeaking;
   const agentText = agentSpeechText;
 
-  let text = "";
+  let r;
   turn = { t0: performance.now(), firstAudio: false };
-  mark("got your audio, transcribing");
-  try { text = await transcribe(f32); }
+  mark(`got your audio (rms ${level.toFixed(3)}), transcribing`);
+  try { r = await transcribe(f32); }
   catch (e) { logError("stt", e); unduck(); return; }
+  const text = r.text;
+
+  // Confidence gate: reject phantom words / garbled noise Whisper isn't sure about.
+  if (r.noSpeechProb > MAX_NO_SPEECH || r.avgLogprob < MIN_AVG_LOGPROB) {
+    unduck();
+    mark(`ignored low-confidence: "${text}" (nsp ${r.noSpeechProb.toFixed(2)}, lp ${r.avgLogprob.toFixed(2)})`);
+    return;
+  }
 
   // If the agent was speaking, was this really you or just its own voice echoing back?
   if (duringAgent && looksLikeEcho(text, agentText)) {

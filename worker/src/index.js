@@ -75,7 +75,7 @@ async function handleSTT(req, env) {
   const fd = new FormData();
   fd.append("file", new Blob([buf], { type: "audio/wav" }), "audio.wav");
   fd.append("model", STT_MODEL);
-  fd.append("response_format", "json");
+  fd.append("response_format", "verbose_json"); // gives per-segment confidence so we can reject phantom words
   fd.append("language", "en");
 
   const r = await fetch(GROQ_STT, {
@@ -85,7 +85,13 @@ async function handleSTT(req, env) {
   });
   if (!r.ok) return new Response(await r.text(), { status: r.status, headers: CORS });
   const j = await r.json();
-  return new Response(JSON.stringify({ text: j.text || "" }), {
+  // Summarize Whisper's own confidence across segments (defaults are safe if fields are absent).
+  let noSpeechProb = 0, avgLogprob = 0, n = 0;
+  if (Array.isArray(j.segments)) {
+    for (const s of j.segments) { noSpeechProb = Math.max(noSpeechProb, s.no_speech_prob ?? 0); avgLogprob += (s.avg_logprob ?? 0); n++; }
+    if (n) avgLogprob /= n;
+  }
+  return new Response(JSON.stringify({ text: j.text || "", noSpeechProb, avgLogprob }), {
     headers: { ...CORS, "Content-Type": "application/json" },
   });
 }
