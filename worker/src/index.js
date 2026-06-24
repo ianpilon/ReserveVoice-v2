@@ -8,11 +8,10 @@
 
 const GROQ_CHAT = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_STT = "https://api.groq.com/openai/v1/audio/transcriptions";
-const GROQ_TTS = "https://api.groq.com/openai/v1/audio/speech";
+const DEEPGRAM_TTS = "https://api.deepgram.com/v1/speak"; // fast hosted TTS, nothing downloads in the browser
 const CHAT_MODEL = "llama-3.3-70b-versatile";      // follows brevity + sounds more natural; ~200ms slower than 8b
 const STT_MODEL = "whisper-large-v3-turbo";        // ~$0.04/hr, far better accuracy than browser STT
-const TTS_MODEL = "canopylabs/orpheus-v1-english"; // Groq's current TTS (expressive); voices: troy, hannah, austin, …
-const TTS_VOICE = "hannah";
+const TTS_VOICE = "aura-2-arcas-en";               // Deepgram Aura-2, American male
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -61,13 +60,14 @@ async function handleLog(req) {
 async function handleTTS(req, env) {
   let body;
   try { body = await req.json(); } catch { return new Response("Bad JSON", { status: 400, headers: CORS }); }
-  const r = await fetch(GROQ_TTS, {
+  const model = body.voice || TTS_VOICE;
+  const r = await fetch(`${DEEPGRAM_TTS}?model=${model}&encoding=mp3`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${env.GROQ_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: TTS_MODEL, input: body.text || "", voice: body.voice || TTS_VOICE, response_format: "wav" }),
+    headers: { Authorization: `Token ${env.DEEPGRAM_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ text: body.text || "" }),
   });
   if (!r.ok) { const e = await r.text(); console.log("TTS ERROR", r.status, e.slice(0, 200)); return new Response(e, { status: r.status, headers: CORS }); }
-  return new Response(r.body, { headers: { ...CORS, "Content-Type": "audio/wav" } });
+  return new Response(r.body, { headers: { ...CORS, "Content-Type": "audio/mpeg" } });
 }
 
 async function handleSTT(req, env) {

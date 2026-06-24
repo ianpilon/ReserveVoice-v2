@@ -1,8 +1,8 @@
-// voice.js v7 — Vapi-grade-ish, near-free. Nothing heavy loads in the browser, so first visit is instant.
-//   Listen : Silero VAD in-browser carves your utterance, Groq Whisper transcribes it
+// voice.js v9 — Deepgram Aura voice (hosted). Instant load (no browser model download), fast synth (~0.3s).
+//   Listen : Silero VAD in-browser carves your utterance, Groq Whisper transcribes it (via Worker)
 //   Think  : Groq LLM (streamed) via the Worker
-//   Speak  : Groq Orpheus TTS via the Worker (hosted — no model download in the browser)
-//   Barge-in: talk over the agent and it stops immediately
+//   Speak  : Deepgram Aura via the Worker — nothing downloads in the browser
+//   Barge-in: talk over the agent and it stops (echo-verified)
 // Requires the onnxruntime-web + vad-web <script> tags in the HTML (global `vad.MicVAD`).
 
 // ---- config ----
@@ -13,13 +13,14 @@ const STT_URL = BASE + "/stt";
 const TTS_URL = BASE + "/tts";
 const LOG_URL = BASE + "/log";
 const SYSTEM_PROMPT =
-  "You are a warm, friendly host at The Copper Fork restaurant, taking a reservation over the phone. " +
-  "Sound like a real person: relaxed and conversational, use contractions and natural phrasing, never robotic or clipped. " +
+  "You are The Copper Fork restaurant's AI assistant, taking a reservation over the phone. " +
+  "Speak warmly and naturally with contractions, never stiff or robotic. If the caller asks whether you're a bot, " +
+  "a person, or AI, say plainly that you're the restaurant's AI assistant. " +
   "Keep each reply to one short sentence (about 12 words). Warmly acknowledge what they just said, then ask for the " +
   "next detail, one at a time, in this order: party size, date, time, name, phone number. " +
   "When you have all five, warmly confirm the booking in one sentence and wrap up. " +
   "If they speak after that, keep it brief and friendly. No lists, markdown, or stiff phrasing.";
-const GREETING = "Copper Fork, how many in your party?";
+const GREETING = "Thanks for calling The Copper Fork. I'm the restaurant's AI assistant, and I can book your table right now. How many people do you need a table for?";
 
 // ---- state ----
 const LABELS = { idle: "Talk to the AI in Your Browser", connecting: "Loading…", active: "End Call", error: "Try Again" };
@@ -35,13 +36,12 @@ let chatController = null;
 let turnGen = 0;
 let speakChain = Promise.resolve();
 let agentSpeechText = ""; // what the agent is currently saying — used to tell real interruptions from echo
+let lastAgentEndTime = 0;  // when the agent last stopped — echo can arrive just after, so we keep guarding briefly
 
 // ---- logging (console only; open DevTools or run RV_DUMP() to inspect timings) ----
 let turn = null;
 window.RV_LOG = [];
-function beaconLog(msg) {
-  try { fetch(LOG_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ msg }), keepalive: true }).catch(() => {}); } catch {}
-}
+function beaconLog(_msg) { /* disabled in production; timings live in the console + RV_DUMP() */ }
 function mark(stage) {
   const since = turn ? Math.round(performance.now() - turn.t0) : 0;
   window.RV_LOG.push({ stage, sinceYouStoppedMs: since });
@@ -76,10 +76,10 @@ function beep() {
   } catch {}
 }
 
-// ---- Speak (Groq Orpheus TTS via Worker — nothing loads in the browser) ----
-async function playSentence(text, gen) {
-  if (gen !== turnGen || !text.trim()) return;
-  let blob;
+// ---- Speak (self-hosted Kokoro via Worker), PIPELINED: synth runs ahead of playback ----
+// Synthesize a chunk immediately so it's ready (or already in flight) by the time it's its turn to play.
+async function synth(text, gen) {
+  if (gen !== turnGen || !text.trim()) return null;
   try {
     const res = await fetch(TTS_URL, {
       method: "POST",
@@ -87,9 +87,13 @@ async function playSentence(text, gen) {
       body: JSON.stringify({ text: text.trim() }),
     });
     if (!res.ok) throw new Error("tts " + res.status);
-    blob = await res.blob();
-  } catch (e) { logError("tts", e); return; }
-  if (gen !== turnGen) return; // barged-in while synthesizing
+    return await res.blob();
+  } catch (e) { logError("tts", e); return null; }
+}
+
+async function playAudio(audioPromise, gen) {
+  const blob = await audioPromise;
+  if (!blob || gen !== turnGen) return; // synth failed or barged-in
   const url = URL.createObjectURL(blob);
   const el = new Audio(url);
   currentAudioEl = el;
@@ -97,9 +101,15 @@ async function playSentence(text, gen) {
   el.onplaying = () => { if (turn && !turn.firstAudio) { turn.firstAudio = true; mark("first audio plays (you hear it)"); } };
   await new Promise((res) => { el.onended = el.onerror = res; el.play().catch(res); });
   URL.revokeObjectURL(url);
-  if (currentAudioEl === el) { currentAudioEl = null; agentSpeaking = false; }
+  if (currentAudioEl === el) { currentAudioEl = null; agentSpeaking = false; lastAgentEndTime = performance.now(); }
 }
-function enqueueSpeech(text, gen) { speakChain = speakChain.then(() => playSentence(text, gen)); return speakChain; }
+
+// Kick off synthesis NOW (parallel, ahead of playback); queue playback to happen in order.
+function enqueueSpeech(text, gen) {
+  const audioPromise = synth(text, gen);
+  speakChain = speakChain.then(() => playAudio(audioPromise, gen));
+  return speakChain;
+}
 
 function stopAgent() {
   turnGen++; // invalidate anything queued or playing
@@ -138,7 +148,9 @@ async function think(text, gen) {
         const delta = JSON.parse(d).choices?.[0]?.delta?.content || "";
         if (delta && !firstTok) { firstTok = true; mark("LLM first token (Groq replied)"); }
         sentence += delta; full += delta; agentSpeechText = full;
-        if (/[.!?]["')\]]?\s*$/.test(sentence) && sentence.trim()) { enqueueSpeech(sentence, gen); sentence = ""; }
+        // Flush on sentence end, or on a comma once we have enough — gets the first audio out faster.
+        const flush = /[.!?]["')\]]?\s*$/.test(sentence) || (/,\s*$/.test(sentence) && sentence.trim().length >= 10);
+        if (flush && sentence.trim()) { enqueueSpeech(sentence, gen); sentence = ""; }
       } catch {}
     }
   }
@@ -170,9 +182,10 @@ async function transcribe(f32) {
 }
 
 function rms(f32) { let s = 0; for (let i = 0; i < f32.length; i++) s += f32[i] * f32[i]; return Math.sqrt(s / f32.length); }
-const MIN_RMS = 0.006;        // below this is essentially silence/distant noise — don't even transcribe it
+const MIN_RMS = 0.003;        // low floor so quiet first words still register; junk caught by confidence gate
 const MAX_NO_SPEECH = 0.7;    // Whisper's own "this isn't speech" probability — the reliable junk signal
 const MIN_AVG_LOGPROB = -1.8; // only reject truly garbled audio; real short words (e.g. "tomorrow") sit near -1.1
+const ECHO_TAIL_MS = 1500;    // keep treating input as possible echo for this long after the agent stops
 
 function unduck() { if (currentAudioEl) { try { currentAudioEl.volume = 1.0; } catch {} } }
 
@@ -202,7 +215,7 @@ async function onSpeechEnd(f32) {
   const level = rms(f32);
   if (level < MIN_RMS) { unduck(); mark(`ignored quiet clip (rms ${level.toFixed(3)})`); return; }
 
-  const duringAgent = agentSpeaking;
+  const duringAgent = agentSpeaking || (performance.now() - lastAgentEndTime < ECHO_TAIL_MS);
   const agentText = agentSpeechText;
 
   let r;
@@ -245,8 +258,8 @@ async function loadVAD() {
     onVADMisfire: () => { mark("vad misfire — restoring volume"); unduck(); }, // blip wasn't real speech: undo the duck
     stream: micStream,
     // tuning for a snappier, less twitchy feel:
-    positiveSpeechThreshold: 0.7, // higher = quiet speaker echo is less likely to trip a (verified) interrupt
-    negativeSpeechThreshold: 0.45,
+    positiveSpeechThreshold: 0.55, // catch short real words like "hello"; echo is handled by duck+verify
+    negativeSpeechThreshold: 0.35,
     redemptionFrames: 10,         // silence frames before end-of-speech; higher avoids clipping trailing words on a pause
     minSpeechFrames: 3,           // ignore ultra-short blips
     preSpeechPadFrames: 2,
@@ -267,10 +280,14 @@ async function startCall() {
 
   // Speak the greeting with the mic NOT yet listening, so the VAD can't trip and invalidate it.
   const gen = ++turnGen;
+  agentSpeechText = GREETING; // so the echo-matcher recognizes the greeting bouncing back
   await enqueueSpeech(GREETING, gen);
   history.push({ role: "assistant", content: GREETING });
 
-  // Greeting done — now cue the caller and start listening.
+  // Let the speakers settle so the greeting's tail isn't captured as the caller's first answer.
+  await new Promise((r) => setTimeout(r, 500));
+
+  // Now cue the caller and start listening.
   if (!callActive) return; // user may have hung up during the greeting
   beep();
   vadObj.start();
