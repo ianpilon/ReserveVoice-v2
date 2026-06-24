@@ -5,11 +5,11 @@ A warm voice receptionist that takes restaurant reservations in the browser. Run
 ## Stack
 - **Listen:** Silero VAD in-browser (free) carves each utterance → **Groq Whisper** (`whisper-large-v3-turbo`) transcribes it
 - **Think:** **Groq** `llama-3.3-70b-versatile` (streamed) via a Cloudflare Worker
-- **Speak:** **Kokoro** (`kokoro-js`) text-to-speech, in-browser (free)
+- **Speak:** **Groq Orpheus** TTS (`canopylabs/orpheus-v1-english`) via the Worker — hosted, so nothing downloads to the browser and the first visit is instant
 - **Barge-in:** talk over the agent and it stops instantly
-- **Backend:** one Cloudflare Worker (`worker/`) that hides the Groq key and serves `/chat` + `/stt`
+- **Backend:** one Cloudflare Worker (`worker/`) that hides the Groq key and serves `/chat` + `/stt` + `/tts`
 
-The browser-side libs load from CDN (see the `<script>` tags in `index.html`): `onnxruntime-web@1.22.0`, `@ricky0123/vad-web@0.0.29`, and `kokoro-js`.
+The only browser-side libs load from CDN (see the `<script>` tags in `index.html`): `onnxruntime-web@1.22.0` and `@ricky0123/vad-web@0.0.29` (small). The Kokoro in-browser model is gone — TTS is now a hosted Groq call.
 
 ## Run / deploy
 
@@ -26,12 +26,11 @@ Put that URL in `index.html` → `window.RESERVE_CONFIG.workerUrl`.
 - Local test (Chrome): `python3 -m http.server 5500 --bind 127.0.0.1`, open http://127.0.0.1:5500
 - Public: `git push` (GitHub Pages serves it at https://ianpilon.github.io/ReserveVoice/)
 
-Click the button, allow the mic, talk. First load downloads the Kokoro + VAD models once. Headphones recommended for cleanest barge-in.
+Click the button, allow the mic, talk. Loads instantly (only the small VAD model). Headphones recommended for cleanest barge-in.
 
 ## Tuning (all in `voice.js` unless noted)
-- Persona / wording: `SYSTEM_PROMPT`, `GREETING`
-- Voice: `VOICE` (`af_heart`, `af_bella`, `bm_george`, …)
-- Speech pace: `el.playbackRate` in `playSentence`
+- Persona / wording: `SYSTEM_PROMPT`, `GREETING` (in `voice.js`)
+- Voice: `TTS_VOICE` in `worker/src/index.js` (`hannah`, `troy`, `austin`, …)
 - Turn-end snappiness vs clipping: `redemptionFrames` in `loadVAD`
 - Chat model / brevity: `CHAT_MODEL`, `max_tokens` in `worker/src/index.js`
 

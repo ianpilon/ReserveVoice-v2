@@ -8,8 +8,11 @@
 
 const GROQ_CHAT = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_STT = "https://api.groq.com/openai/v1/audio/transcriptions";
+const GROQ_TTS = "https://api.groq.com/openai/v1/audio/speech";
 const CHAT_MODEL = "llama-3.3-70b-versatile";      // follows brevity + sounds more natural; ~200ms slower than 8b
 const STT_MODEL = "whisper-large-v3-turbo";        // ~$0.04/hr, far better accuracy than browser STT
+const TTS_MODEL = "canopylabs/orpheus-v1-english"; // Groq's current TTS (expressive); voices: troy, hannah, austin, …
+const TTS_VOICE = "hannah";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -24,6 +27,7 @@ export default {
 
     const path = new URL(req.url).pathname;
     if (path === "/stt") return handleSTT(req, env);
+    if (path === "/tts") return handleTTS(req, env);
     return handleChat(req, env); // default + "/chat"
   },
 };
@@ -45,6 +49,18 @@ async function handleChat(req, env) {
   });
   if (!r.ok) return new Response(await r.text(), { status: r.status, headers: CORS });
   return new Response(r.body, { headers: { ...CORS, "Content-Type": "text/event-stream" } });
+}
+
+async function handleTTS(req, env) {
+  let body;
+  try { body = await req.json(); } catch { return new Response("Bad JSON", { status: 400, headers: CORS }); }
+  const r = await fetch(GROQ_TTS, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.GROQ_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: TTS_MODEL, input: body.text || "", voice: body.voice || TTS_VOICE, response_format: "wav" }),
+  });
+  if (!r.ok) return new Response(await r.text(), { status: r.status, headers: CORS });
+  return new Response(r.body, { headers: { ...CORS, "Content-Type": "audio/wav" } });
 }
 
 async function handleSTT(req, env) {

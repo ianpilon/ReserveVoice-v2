@@ -1,18 +1,16 @@
-// voice.js v6 — Vapi-grade-ish, near-free.
-//   Listen : Silero VAD in-browser (free) carves your utterance, Groq Whisper transcribes it
+// voice.js v7 — Vapi-grade-ish, near-free. Nothing heavy loads in the browser, so first visit is instant.
+//   Listen : Silero VAD in-browser carves your utterance, Groq Whisper transcribes it
 //   Think  : Groq LLM (streamed) via the Worker
-//   Speak  : Kokoro (kokoro-js) in-browser (free)
+//   Speak  : Groq Orpheus TTS via the Worker (hosted — no model download in the browser)
 //   Barge-in: talk over the agent and it stops immediately
 // Requires the onnxruntime-web + vad-web <script> tags in the HTML (global `vad.MicVAD`).
-
-import { KokoroTTS } from "https://cdn.jsdelivr.net/npm/kokoro-js/+esm";
 
 // ---- config ----
 const BASE =
   (window.RESERVE_CONFIG && window.RESERVE_CONFIG.workerUrl) || "http://localhost:8787";
 const CHAT_URL = BASE + "/chat";
 const STT_URL = BASE + "/stt";
-const VOICE = "af_heart";
+const TTS_URL = BASE + "/tts";
 const SYSTEM_PROMPT =
   "You are a warm, friendly host at The Copper Fork restaurant, taking a reservation over the phone. " +
   "Sound like a real person: relaxed and conversational, use contractions and natural phrasing, never robotic or clipped. " +
@@ -25,7 +23,6 @@ const GREETING = "Copper Fork, how many in your party?";
 // ---- state ----
 const LABELS = { idle: "Talk to the AI in Your Browser", connecting: "Loading…", active: "End Call", error: "Try Again" };
 let state = "idle";
-let tts = null;
 let vadObj = null;
 let micStream = null;
 let history = [];
@@ -72,25 +69,22 @@ function beep() {
   } catch {}
 }
 
-// ---- Speak (Kokoro) ----
-async function loadTTS() {
-  if (tts) return tts;
-  const device = "gpu" in navigator ? "webgpu" : "wasm";
-  const dtype = device === "webgpu" ? "fp32" : "q8";
-  console.log(`[voice] Kokoro device=${device} dtype=${dtype}`);
-  tts = await KokoroTTS.from_pretrained("onnx-community/Kokoro-82M-v1.0-ONNX", { dtype, device });
-  return tts;
-}
-
+// ---- Speak (Groq Orpheus TTS via Worker — nothing loads in the browser) ----
 async function playSentence(text, gen) {
   if (gen !== turnGen || !text.trim()) return;
-  let audio;
-  try { audio = await tts.generate(text.trim(), { voice: VOICE }); }
-  catch (e) { logError("tts", e); return; }
+  let blob;
+  try {
+    const res = await fetch(TTS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text.trim() }),
+    });
+    if (!res.ok) throw new Error("tts " + res.status);
+    blob = await res.blob();
+  } catch (e) { logError("tts", e); return; }
   if (gen !== turnGen) return; // barged-in while synthesizing
-  const url = URL.createObjectURL(audio.toBlob());
+  const url = URL.createObjectURL(blob);
   const el = new Audio(url);
-  el.playbackRate = 1.0; // natural pace — speeding up TTS is what makes it sound robotic
   currentAudioEl = el;
   agentSpeaking = true;
   el.onplaying = () => { if (turn && !turn.firstAudio) { turn.firstAudio = true; mark("first audio plays (you hear it)"); } };
@@ -211,7 +205,6 @@ async function startCall() {
   setState("connecting");
   try { micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); }
   catch (e) { logError("mic", e); setState("error"); return; }
-  try { await loadTTS(); } catch (e) { logError("kokoro", e); setState("error"); return; }
   try { vadObj = await loadVAD(); } catch (e) { logError("vad", e); setState("error"); return; }
 
   callActive = true; history = []; turnGen = 0;
